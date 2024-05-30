@@ -1,10 +1,20 @@
 import pygame
+import frontend
 import backend
 
 # Example file showing a basic pygame "game loop"
 # pygame setup
 pygame.init()
-screen = pygame.display.set_mode((1280, 720))
+
+# Get the screen resolution
+screen_info = pygame.display.Info()
+screen_width = int(screen_info.current_w*0.8)
+screen_height = int(screen_info.current_h*0.8)
+
+# Set the display mode to the 80% of the screen resolution
+screen = pygame.display.set_mode((screen_width, screen_height))
+pygame.display.set_caption("Rock Paper Scissors")
+
 clock = pygame.time.Clock()
 running = True
 dt=0
