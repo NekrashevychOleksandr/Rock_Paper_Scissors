@@ -1,5 +1,5 @@
 import pygame
-import pygame as pg
+import backend
 
 # Example file showing a basic pygame "game loop"
 # pygame setup
@@ -9,6 +9,8 @@ clock = pygame.time.Clock()
 running = True
 dt=0
 
+# Initialized Rock, Paper, Scissors bot object
+RPS_bot = backend.RPS_bot()
 
 #Here it seems to put the position of the player in the centre of the screen
 player_pos= pygame.Vector2 (screen.get_width()/2,screen.get_height()/2)
