@@ -26,8 +26,7 @@ clock = pygame.time.Clock()
 running = True
 dt=0
 
-# Initialized Rock, Paper, Scissors bot object
-RPS_bot = backend.RPS_bot()
+
 
 
 
@@ -46,11 +45,21 @@ while running:
 #------------------------------------------------------------------------------------------------------------
     
 
+    # Initialized Rock, Paper, Scissors bot object
+    RPS_bot = backend.RPS_bot()
+
+    button_width = screen_width//3
+    button_height = screen_height//3
 
 
+    button_Rock = frontend.button(screen,"blue", 0, screen_height-button_height, button_width, button_height,10000)
+    button_Rock.draw_button_border_rect()
 
+    button_Paper = frontend.button(screen,"Red", button_width, screen_height-button_height, button_width, button_height,10000)
+    button_Paper.draw_button_border_rect()
 
-
+    button_Scissors = frontend.button(screen,"Green", button_width*2, screen_height-button_height, button_width, button_height,10000)
+    button_Scissors.draw_button_border_rect()
 
 
 #-------------------------------------------------------------------------------------------------------------    
