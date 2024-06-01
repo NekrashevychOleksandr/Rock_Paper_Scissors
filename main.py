@@ -6,10 +6,17 @@ import backend
 # pygame setup
 pygame.init()
 
+
+
+
+
 # Get the screen resolution
 screen_info = pygame.display.Info()
 screen_width = int(screen_info.current_w*0.8)
 screen_height = int(screen_info.current_h*0.8)
+
+
+
 
 # Set the display mode to the 80% of the screen resolution
 screen = pygame.display.set_mode((screen_width, screen_height))
@@ -44,10 +51,14 @@ while running:
    
     #Next up Im checking and testing through the inputs, this allows the circle to move, adjusting numbers allows it to move faster
     keys= pygame.key.get_pressed()
-    if keys [pygame.K_w]: player_pos.y -=600*dt
-    if keys [pygame.K_s]: player_pos.y +=600*dt
-    if keys [pygame.K_a]: player_pos.x -=600*dt
-    if keys [pygame.K_d]: player_pos.x +=600*dt
+    if keys [pygame.K_w]: 
+        player_pos.y -=600*dt
+    if keys [pygame.K_s]: 
+        player_pos.y +=600*dt
+    if keys [pygame.K_a]: 
+        player_pos.x -=600*dt
+    if keys [pygame.K_d]: 
+        player_pos.x +=600*dt
 
 
     # flip() the display to put your work on screen
@@ -56,3 +67,5 @@ while running:
     dt=clock.tick(60)/1000 # limits FPS to 60, and the speed by which the circle can move within a given frame
 
 pygame.quit()
+
+
