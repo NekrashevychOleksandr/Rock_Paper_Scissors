@@ -16,7 +16,6 @@ screen_height = int(screen_info.current_h*0.8)
 
 
 
-
 # Set the display mode to the 80% of the screen resolution
 screen = pygame.display.set_mode((screen_width, screen_height))
 pygame.display.set_caption("Rock Paper Scissors")
@@ -54,7 +53,19 @@ while running:
     button_width = screen_width//3
     button_height = screen_height//3
 
+    # Excelsior, lets try once more with feeling
+    image_path = "Media/Image/Neutral.jpg"
+    image = pygame.image.load(image_path)
     
+    image_rect= image.get_rect()
+    imagex = (screen_width - image_rect.width)//2
+    imagey = (screen_height - image_rect.height)//2
+    image_rect.topleft = (imagex, imagey)
+
+    screen.blit (image, image_rect.topleft)
+
+
+
 
     # Creating button instances and drawing them on the screen
     button_Rock = frontend.button(screen,"blue", 0, screen_height-button_height, button_width, button_height,10000)
