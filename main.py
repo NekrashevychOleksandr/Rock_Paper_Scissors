@@ -1,6 +1,10 @@
 import pygame
 import frontend
 import backend
+import os
+
+script_dir = os.path.dirname(__file__)
+
 
 # Example file showing a basic pygame "game loop"
 # pygame setup
@@ -38,8 +42,12 @@ while running:
         elif event.type == pygame.MOUSEBUTTONDOWN:
             mouse_x, mouse_y = event.pos
 
-    # fill the screen with a color to wipe away anything from last frame
-    screen.fill("purple")
+    # fill the screen with an image
+    room_1_image_path = os.path.join(script_dir, 'Media', 'Image', 'Room1.png')
+    background_image = pygame.image.load(room_1_image_path)
+    background_image = pygame.transform.scale(background_image, (screen_width, screen_height))
+    screen.blit(background_image, (0, 0))
+    
 
     # RENDER YOUR GAME HERE
 
@@ -67,15 +75,21 @@ while running:
 
 
 
+    # Construct relative paths to your image files
+    rock_image_path = os.path.join(script_dir, 'Media', 'Image', 'Rock_button.png')
+    paper_image_path = os.path.join(script_dir, 'Media', 'Image', 'Paper_button.png')
+    scissors_image_path = os.path.join(script_dir, 'Media', 'Image', 'Scissors_button.png')
+    
+
     # Creating button instances and drawing them on the screen
-    button_Rock = frontend.button(screen,"blue", 0, screen_height-button_height, button_width, button_height,10000)
-    button_Rock.draw_button_border_rect()
+    button_Rock = frontend.button(screen,"blue", 0, screen_height-button_height, button_width, button_height,10000,rock_image_path)
+    button_Rock.draw_button()
 
-    button_Paper = frontend.button(screen,"Red", button_width, screen_height-button_height, button_width, button_height,10000)
-    button_Paper.draw_button_border_rect()
+    button_Paper = frontend.button(screen,"Red", button_width, screen_height-button_height, button_width, button_height,10000,paper_image_path)
+    button_Paper.draw_button()
 
-    button_Scissors = frontend.button(screen,"Green", button_width*2, screen_height-button_height, button_width, button_height,10000)
-    button_Scissors.draw_button_border_rect()
+    button_Scissors = frontend.button(screen,"Green", button_width*2, screen_height-button_height, button_width, button_height,10000,scissors_image_path)
+    button_Scissors.draw_button()
 
     if button_Rock.coordinates[0] <= mouse_x <= button_Rock.coordinates[0] + button_Rock.width and button_Rock.coordinates[1] <= mouse_y <= button_Rock.coordinates[1] + button_Rock.height:
                 print("Rock Button clicked!")
