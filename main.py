@@ -66,8 +66,8 @@ while running:
     image_path = "Media/Image/Neutral.jpg"
     image = pygame.image.load(image_path)
    #height and width
-    new_width=200
-    new_height=150
+    new_width= screen_width//8
+    new_height= screen_height//8
     #creating the centered rectangle for the loaded image
     image_rect= image.get_rect()
     imagex = (screen_width - new_width)/2
