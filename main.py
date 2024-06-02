@@ -70,7 +70,9 @@ while running:
     imagey = (screen_height - image_rect.height)//2
     image_rect.topleft = (imagex, imagey)
 
-    screen.blit (image, image_rect.topleft)
+    resized_image = pygame.transform.scale(image, (400, 300))
+
+    screen.blit (resized_image, image_rect.topleft)
 
 
 
