@@ -61,18 +61,22 @@ while running:
     button_width = screen_width//3
     button_height = screen_height//3
 
-    # Excelsior, lets try once more with feeling
+# Excelsior, lets try once more with feeling
+    #image pathway load in
     image_path = "Media/Image/Neutral.jpg"
     image = pygame.image.load(image_path)
-    
+   #height and width
+    new_width=200
+    new_height=150
+    #creating the centered rectangle for the loaded image
     image_rect= image.get_rect()
-    imagex = (screen_width - image_rect.width)//2
-    imagey = (screen_height - image_rect.height)//2
-    image_rect.topleft = (imagex, imagey)
-
-    resized_image = pygame.transform.scale(image, (400, 300))
-
-    screen.blit (resized_image, image_rect.topleft)
+    imagex = (screen_width - new_width)/2
+    imagey = (screen_height - new_height)/2
+    image_rect.center = (imagex, imagey)
+    #resize the image
+    resized_image = pygame.transform.scale(image, (new_width, new_height))
+    #update screen position with the resized image and centered position
+    screen.blit (resized_image, image_rect.center)
 
 
 
