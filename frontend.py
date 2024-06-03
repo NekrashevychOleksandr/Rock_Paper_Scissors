@@ -27,11 +27,17 @@ class button:
             self.screen.blit(self.image, (self.coordinates[0], self.coordinates[1]))
 
 
-class player_sprite(pygame.sprite.Sprite):
-    def __init__(self, x,y, image_path):
-        self.position = (x, y)
-        self.image = pygame.image.load(image_path)
-
+class player_hand(pygame.sprite.Sprite):
+    def __init__(self, images, start_pos):
+        super().__init__()
+        self.images = images
+        self.image = self.images["default"]
+        self.rect= self.image.get_rect (center = start_pos)
+    
+    def update_image(self, new_image_key):
+         if new_image_key in self.images:
+            self.image = self.images[new_image_key]
+            self.rect = self.image.get_rect(center=self.rect.center)
  
-    def draw (self, surface):
-        surface.blit(self.image, self.position)
+    def update (self):
+        pass
