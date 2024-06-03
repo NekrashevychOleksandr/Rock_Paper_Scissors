@@ -34,9 +34,11 @@ class player_hand(pygame.sprite.Sprite):
         self.image = self.images["default"]
         self.rect= self.image.get_rect (center = start_pos)
     
-    def update_image(self, new_image_key):
+    def update_image(self, new_image_key, new_size=None):
          if new_image_key in self.images:
             self.image = self.images[new_image_key]
+            if new_size:
+                self.image=pygame.transform.scale(self.image, new_size)
             self.rect = self.image.get_rect(center=self.rect.center)
  
     def update (self):

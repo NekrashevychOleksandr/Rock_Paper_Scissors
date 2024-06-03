@@ -41,7 +41,7 @@ images_player_hand = {
 
 #The position of the hand, relative to the resolution of the screen
 player_start_pos = (screen_width // 8, screen_height // 8)
-#Generating hand
+#Generating hand for player, related to above dictionary of pictures
 player_hand = frontend.player_hand(images_player_hand, player_start_pos)
 #Adding the hand to a group of sprites that are updated all at once
 sprites = pygame.sprite.Group()
@@ -101,7 +101,6 @@ while running:
     if button_Rock.coordinates[0] <= mouse_x <= button_Rock.coordinates[0] + button_Rock.width and button_Rock.coordinates[1] <= mouse_y <= button_Rock.coordinates[1] + button_Rock.height:
                 print("Rock Button clicked!")
                 player_hand.update_image("state_R")
-                
                 
     if button_Paper.coordinates[0] <= mouse_x <= button_Paper.coordinates[0] + button_Paper.width and button_Paper.coordinates[1] <= mouse_y <= button_Paper.coordinates[1] + button_Paper.height:
                 print("Paper Button clicked!")
