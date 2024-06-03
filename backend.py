@@ -35,6 +35,7 @@ class battle_grid:
         self.round_count = 0
         self.player_turn = True
         self.battle_end = False
+        self.tile_selected = [-1,-1]
 
 
     # Updates character position
@@ -68,7 +69,9 @@ class battle_grid:
         self.grid_tile_info[tile_position[0]][tile_position[1]] = new_tile_type + self.grid_tile_info[tile_position[0]][tile_position[1]][1:]
         return
 
-
+    # Attempts to select tile
+    def select_tile_attempt(self, tile_position):
+        pass
 
 
         
