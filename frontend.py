@@ -32,7 +32,7 @@ class player_hand(pygame.sprite.Sprite):
         super().__init__()
         self.images = images
         self.image = self.images["default"]
-        self.rect= self.image.get_rect (center = start_pos)
+        self.rect= self.image.get_rect(center = start_pos)
     
     def update_image(self, new_image_key, new_size=None):
          if new_image_key in self.images:
