@@ -25,6 +25,7 @@ class character:
 class battle_grid:
     
     def __init__(self, dimensions, grid_tile_info, player_characters, opponent_characters):
+        
         self.dimensions = dimensions
 
         # example grid_tile_info element = "G*P01" 
@@ -35,7 +36,8 @@ class battle_grid:
         self.round_count = 0
         self.player_turn = True
         self.battle_end = False
-        self.tile_selected = [-1,-1]
+        self.tile_selected = False
+        self.tile_selected_position = [-1,-1]
 
 
     # Updates character position
@@ -71,7 +73,19 @@ class battle_grid:
 
     # Attempts to select tile
     def select_tile_attempt(self, tile_position):
-        pass
+
+        if self.grid_tile_info[tile_position[0]][tile_position[1]][2] == "P":
+            self.tile_selected_position = tile_position
+            self.tile_selected = True
+        return
+    
+    # Attempts to make move from prior selected tile to newly selected tile
+    def selected_tile_move_attempt(self, new_tile_position):
+
+        if self.grid_tile_info[new_tile_position[0]][new_tile_position[1]][2] == "P":
+            pass
+
+        
 
 
         
