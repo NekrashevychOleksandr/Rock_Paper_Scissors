@@ -40,7 +40,7 @@ images_player_hand = {
     "state_R": pygame.image.load("Media/Image/rock.jpg").convert_alpha()}
 
 #The position of the hand, relative to the resolution of the screen
-player_start_pos = (screen_width // 8, screen_height // 8)
+player_start_pos = (screen_width // 2, screen_height // 2)
 #Generating hand for player, related to above dictionary of pictures
 player_hand = frontend.player_hand(images_player_hand, player_start_pos)
 #Adding the hand to a group of sprites that are updated all at once
