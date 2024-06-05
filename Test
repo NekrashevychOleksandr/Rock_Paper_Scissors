@@ -14,6 +14,26 @@ tilesize= 128
 window_width = tilesize * tiles_horizontal
 window_height = tilesize * tiles_vertical
 #--------------------------------------------------------------------------------------------------------------------------
+class Tile:
+    def __init__(self,id, x, y, tile_type):
+        self.id = id
+        self.x= int(x) # converts the string values from the list into integers for coordinates
+        self.y= int(y)
+        self.tile_type= tile_type
+    
+        if tile_type == "g": filepath="Media/Tiles/Grass_Tile.jpg" #sets the file path corresponding to the map in .txt file
+        elif tile_type == "d": filepath="Media/Tiles/Dirt_Tile.png"
+        else: raise ValueError("Error: Tile Type", tile_type)
+
+        self.rect = pygame.Rect(self.x* tilesize, self.y*tilesize, tilesize, tilesize)
+        self.image= pygame.image.load(filepath).convert_alpha()
+        self.image= pygame.transform.scale(self.image, (tilesize, tilesize))
+
+    def debug_print(self):
+        s = "id: {}, x: {}, y: {}, kind: {}"
+        s = s.format(self.id, self.x, self.y, self.kind_of_tile)
+        print(s)
+
 class Tiles:
     def __init__(self, screen):
         self.screen = screen
@@ -48,17 +68,6 @@ class Tiles:
     def debug_print(self):
         for elem in self.inner:
             elem.debug_print()
-
-
-class Tile:
-    def __init__(self,id, x, y, tile_type):
-        self.id = id
-        self.x= int(x) # converts the string values from the list into integers for coordinates
-        self.y= int(y)
-        self.tile_type= tile_type
-    
-        if tile_type == "g": filename = 
-
 
 #-----------------------------------------------------------------------------------------------------------------
 # Basically the same set up for running the game, just as a class instead of in the main code
