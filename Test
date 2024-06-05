@@ -1,0 +1,106 @@
+import pygame
+import os
+
+# Apologies in advance for all the green text and doing it in a seperate file, wanted to test things out
+
+
+
+# Title name, and tile size and amount and how it would fit into screen resolution. Here we may want to adjust more
+title= "grid_map"
+tiles_horizontal= 4
+tiles_vertical= 4
+tilesize= 128
+
+window_width = tilesize * tiles_horizontal
+window_height = tilesize * tiles_vertical
+#--------------------------------------------------------------------------------------------------------------------------
+class Tiles:
+    def __init__(self, screen):
+        self.screen = screen
+        self.inner = [] #inner works as a list object to store tiles, pulls from a notepad.txt
+        self.current_tile= None
+        self.load_data()
+
+    def load_data(self):
+        self.inner = []
+        filepath= os.path.join("Maps","Tile_Map_Test.txt")
+        with open(filepath, "r") as f: #opened file put into read mode, the "with" closes the file after code is executed
+            mylines = f.readlines() #reads all lines in the file and stroes in list mylines
+            mylines = [i.strip() for i in mylines if len(i.strip())>0] #removes whitespace and includes only non-empty lines
+        
+        id=0 #id for the current tile
+
+        for count_i, myline in enumerate (mylines): #looks at mylines with count_I as line index, and mylines as content
+            temp_list = myline.split(";") #reads each line as split off by a ; into a temporary list
+            temp_list = [i.strip() for i in temp_list if len(i.strip()>0)] # again empty elements or white space removed from the temporary list
+
+            for count_j, elem in enumerate(temp_list): #a loop to then look at temp_list, with count_j as element index adn "elem" as its content
+                new_tile = Tile(id, count_j, count_i, elem) #the tile object created with an ID, its column position "count_J" and row position count_i, which will later serve as positioning. And finally the element, which is the tile type
+                self.inner.append(new_tile) #added to file inner, to store these objects
+                id += 1 #moves on to the next tile in the list with its own identifier
+    
+    def draw(self,surface):
+        if len(self.inner) == 0:
+            raise ValueError("No Tiles to load in")
+        for elem in self.inner:
+            self.screen.blit(elem.image, elem.rect)
+    
+    def debug_print(self):
+        for elem in self.inner:
+            elem.debug_print()
+
+
+class Tile:
+    def __init__(self,id, x, y, tile_type):
+        self.id = id
+        self.x= int(x) # converts the string values from the list into integers for coordinates
+        self.y= int(y)
+        self.tile_type= tile_type
+    
+        if tile_type == "g": filename = 
+
+
+#-----------------------------------------------------------------------------------------------------------------
+# Basically the same set up for running the game, just as a class instead of in the main code
+class Game:
+    def __init__(self):
+        pygame.init()
+        self.clock = pygame.time.Clock()
+        pygame.display.set_caption (title)
+        self.surface = pygame.display.set_mode ((window_width, window_height))
+        self.BG_COLOR = "green"
+        self.running= True
+        #Next up is setting tile surfaces
+        self.tiles= Tiles(self.surface)
+
+#Here are the definitions under Game, for events that exit the screen:
+    def events(self):
+        for event in pygame.event.get():
+            if event.type == pygame.QUIT:
+                self.running = False
+            elif event.type == pygame.KEYDOWN:
+                if event.key == pygame.K_ESCAPE:
+                    self.running = False
+
+# Here are the definitions under game to update screen later on
+    def update(self):
+        pass
+
+# Here we set up the draw of the empty screen with a background colour
+    def draw(self):
+        self.surface.fill(self.BG_COLOR)
+        pygame.display.update()
+
+#Main function, which handles the running of the events, setting up the screen and updating
+    def main(self):
+        while self.running:
+            self.events()
+            self.update()
+            self.draw()
+
+#-----------------------------------------------------------------------------------
+#initializes an instance of the Game class.
+if __name__ == "__main__":
+    mygame = Game()
+    mygame.main()
+
