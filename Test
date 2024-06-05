@@ -4,7 +4,6 @@ import os
 # Apologies in advance for all the green text and doing it in a seperate file, wanted to test things out
 
 
-
 # Title name, and tile size and amount and how it would fit into screen resolution. Here we may want to adjust more
 title= "grid_map"
 tiles_horizontal= 8
