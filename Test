@@ -20,10 +20,14 @@ class Tile:
         self.x= int(x) # converts the string values from the list into integers for coordinates
         self.y= int(y)
         self.tile_type= tile_type
+        
     
-        if tile_type == "g": filepath="Media/Tiles/Grass_Tile.jpg" #sets the file path corresponding to the map in .txt file
-        elif tile_type == "d": filepath="Media/Tiles/Dirt_Tile.png"
-        else: raise ValueError("Error: Tile Type", tile_type)
+        if tile_type == "g": 
+            filepath="Media/Tiles/Grass_Tile.jpg" #sets the file path corresponding to the map in .txt file
+        elif tile_type == "d": 
+            filepath="Media/Tiles/Dirt_Tile.png"
+        else:
+            raise ValueError("Error: Tile Type", tile_type)
 
         self.rect = pygame.Rect(self.x* tilesize, self.y*tilesize, tilesize, tilesize)
         self.image= pygame.image.load(filepath).convert_alpha()
@@ -31,7 +35,7 @@ class Tile:
 
     def debug_print(self):
         s = "id: {}, x: {}, y: {}, kind: {}"
-        s = s.format(self.id, self.x, self.y, self.kind_of_tile)
+        s = s.format(self.id, self.x, self.y, self.tile_type)
         print(s)
 
 class Tiles:
@@ -46,13 +50,13 @@ class Tiles:
         filepath= os.path.join("Maps","Tile_Map_Test.txt")
         with open(filepath, "r") as f: #opened file put into read mode, the "with" closes the file after code is executed
             mylines = f.readlines() #reads all lines in the file and stroes in list mylines
-            mylines = [i.strip() for i in mylines if len(i.strip())>0] #removes whitespace and includes only non-empty lines
+            mylines = [i.strip() for i in mylines if len(i.strip()) > 0] #removes whitespace and includes only non-empty lines
         
         id=0 #id for the current tile
 
         for count_i, myline in enumerate (mylines): #looks at mylines with count_I as line index, and mylines as content
             temp_list = myline.split(";") #reads each line as split off by a ; into a temporary list
-            temp_list = [i.strip() for i in temp_list if len(i.strip()>0)] # again empty elements or white space removed from the temporary list
+            temp_list = [i.strip() for i in temp_list if len(i.strip()) > 0] # again empty elements or white space removed from the temporary list
 
             for count_j, elem in enumerate(temp_list): #a loop to then look at temp_list, with count_j as element index adn "elem" as its content
                 new_tile = Tile(id, count_j, count_i, elem) #the tile object created with an ID, its column position "count_J" and row position count_i, which will later serve as positioning. And finally the element, which is the tile type
@@ -98,6 +102,7 @@ class Game:
 # Here we set up the draw of the empty screen with a background colour
     def draw(self):
         self.surface.fill(self.BG_COLOR)
+        self.tiles.draw(self.surface)
         pygame.display.update()
 
 #Main function, which handles the running of the events, setting up the screen and updating
