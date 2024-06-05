@@ -7,9 +7,9 @@ import os
 
 # Title name, and tile size and amount and how it would fit into screen resolution. Here we may want to adjust more
 title= "grid_map"
-tiles_horizontal= 4
-tiles_vertical= 4
-tilesize= 128
+tiles_horizontal= 8
+tiles_vertical= 8
+tilesize= 64
 
 window_width = tilesize * tiles_horizontal
 window_height = tilesize * tiles_vertical

@@ -1,4 +1,8 @@
-g;g;g;g
-g;g;d;d
-g;g;d;d
-g;g;g;g
+g;g;g;g;d;d;g;g
+g;g;d;d;d;g;g;g
+g;g;d;d;d;g;g;g
+g;g;g;g;d;g;g;g
+d;d;g;g;g;d;g;g
+d;d;g;g;g;d;d;g
+d;d;d;g;g;g;g;d
+g;g;g;g;g;g;d;d
