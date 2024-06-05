@@ -8,9 +8,11 @@ class AI_bot:
 
 # Represents characters on the grid
 class character:
-    def __init__(self, name, character_id, current_HP, max_HP, ATK, DEF, AGI, statuses, equipment):
+    def __init__(self, titles, name, character_id, LVL, current_HP, max_HP, ATK, DEF, AGI, statuses, equipment):
+        self.titles = titles
         self.name = name
         self.character_id = character_id
+        self.LVL = LVL
         self.current_HP = current_HP
         self.max_HP = max_HP
         self.ATK = ATK
@@ -18,6 +20,49 @@ class character:
         self.AGI = AGI
         self.statuses = statuses
         self.equipment = equipment
+        self.is_Dead = False
+        
+    def LVL_up(self):
+        self.LVL += 1
+        self.max_HP += 1 
+        self.AGI += 1
+        self.ATK += 1
+        self.DEF += 1
+
+    def attack_character(self,incoming_damage):
+        self.current_HP -= (incoming_damage - self.DEF)
+    
+    def heal_character(self, incoming_heal):
+        self.current_HP += incoming_heal
+
+        # Prevents "overhealing"
+        if self.current_HP > self.max_HP:
+            self.current_HP = self.max_HP
+
+    def increase_max_HP(self,increase_in_Max_HP):
+        self.max_HP += increase_in_Max_HP
+
+    def increase_ATK(self,increase_in_ATK):
+        self.ATK += increase_in_ATK
+
+    def increase_AGI(self,increase_in_AGI):
+        self.AGI += increase_in_AGI
+
+    def increase_DEF(self,increase_in_DEF):
+        self.DEF += increase_in_DEF
+
+    def decrease_max_HP(self,decrease_in_Max_HP):
+        self.max_HP -= decrease_in_Max_HP
+
+    def decrease_ATK(self,decrease_in_ATK):
+        self.ATK -= decrease_in_ATK
+
+    def decrease_AGI(self,decrease_in_AGI):
+        self.AGI -= decrease_in_AGI
+
+    def decrease_DEF(self,decrease_in_DEF):
+        self.DEF -= decrease_in_DEF
+
 
 
 
