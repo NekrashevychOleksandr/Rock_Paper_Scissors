@@ -21,6 +21,7 @@ class character:
         self.statuses = statuses
         self.equipment = equipment
         self.is_Dead = False
+        self.has_turn = True
         
     def LVL_up(self):
         self.LVL += 1
@@ -119,11 +120,28 @@ class battle_grid:
     # Attempts to select tile
     def select_tile_attempt(self, tile_position):
 
-        if self.grid_tile_info[tile_position[0]][tile_position[1]][2] == "P":
+        if self.grid_tile_info[tile_position[0]][tile_position[1]][2] == "P" and self.player_characters[int(self.grid_tile_info[tile_position[0]][tile_position[1]][3:5])-1].has_turn:
             self.tile_selected_position = tile_position
             self.tile_selected = True
         return
     
+    # Returns list of availabe moves for the given character and their position
+    def get_all_available_moves(self, selected_character,character_position):
+
+        available_moves = []
+
+        for i in range(1, selected_character.AGI):
+            available_moves.append([character_position[0]-i,character_position[1]])
+            available_moves.append([character_position[0]+i,character_position[1]])
+            available_moves.append([character_position[0],character_position[1]+i])
+            available_moves.append([character_position[0],character_position[1]-i])
+            available_moves.append([character_position[0]+i,character_position[1]+i])
+            available_moves.append([character_position[0]-i,character_position[1]+i])
+            available_moves.append([character_position[0]+i,character_position[1]-i])
+            available_moves.append([character_position[0]-i,character_position[1]-i])
+
+        return available_moves
+
     # Attempts to make move from prior selected tile to newly selected tile
     def selected_tile_move_attempt(self, new_tile_position):
 
