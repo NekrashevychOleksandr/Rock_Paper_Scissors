@@ -75,8 +75,8 @@ class battle_grid:
         
         self.dimensions = dimensions
 
-        # example grid_tile_info element = "G*P01" 
-        #G = Grass tile, character with id = 01 present on the tile
+        # example grid_tile_info element = "G01*P01" 
+        #G01 = Grass tile, character with id = P01 present on the tile
         self.grid_tile_info = grid_tile_info
         self.player_characters = player_characters
         self.opponent_characters = opponent_characters
