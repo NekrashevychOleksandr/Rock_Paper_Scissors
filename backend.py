@@ -8,7 +8,7 @@ class AI_bot:
 
 # Represents characters on the grid
 class character:
-    def __init__(self, titles, name, character_id, LVL, current_HP, max_HP, ATK, DEF, AGI, statuses, equipment):
+    def __init__(self, titles, name, character_id, LVL, current_HP, max_HP, ATK, DEF, AGI, statuses, equipment,starting_position):
         self.titles = titles
         self.name = name
         self.character_id = character_id
@@ -22,6 +22,7 @@ class character:
         self.equipment = equipment
         self.is_Dead = False
         self.has_turn = True
+        self.position = starting_position
         
     def LVL_up(self):
         self.LVL += 1
@@ -84,6 +85,9 @@ class battle_grid:
         self.battle_end = False
         self.tile_selected = False
         self.tile_selected_position = [-1,-1]
+
+        
+
 
 
     # Updates character position
@@ -152,6 +156,3 @@ class battle_grid:
 
 
         
-
-
-
