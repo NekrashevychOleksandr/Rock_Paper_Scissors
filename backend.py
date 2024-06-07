@@ -1,14 +1,22 @@
+# Dictionary containing the effects on agility of each tile
+tile_agility ={ "G": 0,
+                "D": 0,
+                "W": -2,
+                "M": -5
+}
+
+
 
 # AI bot responsible for making moves of NPC pieces
 class AI_bot:
 
     def __init__(self):
         pass
-    
+   
 
 # Represents characters on the grid
 class character:
-    def __init__(self, titles, name, character_id, LVL, current_HP, max_HP, ATK, DEF, AGI, statuses, equipment,starting_position):
+    def __init__(self, titles, name, character_id, LVL, current_HP, max_HP, ATK, DEF, AGI, statuses, equipment):
         self.titles = titles
         self.name = name
         self.character_id = character_id
@@ -22,7 +30,7 @@ class character:
         self.equipment = equipment
         self.is_Dead = False
         self.has_turn = True
-        self.position = starting_position
+        
         
     def LVL_up(self):
         self.LVL += 1
@@ -84,7 +92,8 @@ class battle_grid:
         self.player_turn = True
         self.battle_end = False
         self.tile_selected = False
-        self.tile_selected_position = [-1,-1]
+        self.selected_tile_position = [-1,-1]
+        self.available_move_tiles = None
 
         
 
@@ -121,36 +130,58 @@ class battle_grid:
         self.grid_tile_info[tile_position[0]][tile_position[1]] = new_tile_type + self.grid_tile_info[tile_position[0]][tile_position[1]][1:]
         return
 
+    # Returns list of availabe moves for the given character and their position based on agilitiy value
+    def get_all_available_moves(self, selected_character):
+
+        available_moves = []
+
+        true_agility = selected_character.AGI - tile_agility[self.grid_tile_info[self.selected_tile_position[0]][self.selected_tile_position[1]][0]]
+
+        # Makes sure true agility is always at least 1 (or else characters could get stuck on a tile if agility too low)
+        if true_agility < 1:
+            true_agility = 1
+
+
+        available_moves.append([self.selected_tile_position[0]-1,self.selected_tile_position[1]])
+        available_moves.append([self.selected_tile_position[0]+1,self.selected_tile_position[1]])
+        available_moves.append([self.selected_tile_position[0],self.selected_tile_position[1]+1])
+        available_moves.append([self.selected_tile_position[0],self.selected_tile_position[1]-1])
+        last_added_moves = available_moves.copy()
+
+        # Determines all possible end tiles based on character agility
+        for _ in range(true_agility-1):
+            for move in last_added_moves:
+                temp_array = []
+                temp_array.append([move[0]-1,move[1]])
+                temp_array.append([move[0]+1,move[1]])
+                temp_array.append([move[0],move[1]+1])
+                temp_array.append([move[0],move[1]-1])
+
+                # Combines the new moves with old moves but removes the duplicates
+                available_moves = list(set(available_moves) | set(temp_array))
+                last_added_moves = temp_array.copy()
+
+        self.available_move_tiles = available_moves.copy
+
     # Attempts to select tile
     def select_tile_attempt(self, tile_position):
 
         if self.grid_tile_info[tile_position[0]][tile_position[1]][2] == "P" and self.player_characters[int(self.grid_tile_info[tile_position[0]][tile_position[1]][3:5])-1].has_turn:
             self.tile_selected_position = tile_position
             self.tile_selected = True
+            character_index = int(self.grid_tile_info[tile_position[0]][tile_position[1]][3:5])-1
+            self.get_all_available_moves(self.player_characters[character_index])
         return
     
-    # Returns list of availabe moves for the given character and their position
-    def get_all_available_moves(self, selected_character,character_position):
-
-        available_moves = []
-
-        for i in range(1, selected_character.AGI):
-            available_moves.append([character_position[0]-i,character_position[1]])
-            available_moves.append([character_position[0]+i,character_position[1]])
-            available_moves.append([character_position[0],character_position[1]+i])
-            available_moves.append([character_position[0],character_position[1]-i])
-            available_moves.append([character_position[0]+i,character_position[1]+i])
-            available_moves.append([character_position[0]-i,character_position[1]+i])
-            available_moves.append([character_position[0]+i,character_position[1]-i])
-            available_moves.append([character_position[0]-i,character_position[1]-i])
-
-        return available_moves
+    
 
     # Attempts to make move from prior selected tile to newly selected tile
     def selected_tile_move_attempt(self, new_tile_position):
 
-        if self.grid_tile_info[new_tile_position[0]][new_tile_position[1]][2] == "P":
-            pass
+        if new_tile_position in self.available_move_tiles:
+            
+            if self.grid_tile_info[new_tile_position[0]][new_tile_position[1]][2] == "_":
+                pass
 
         
 
