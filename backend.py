@@ -123,7 +123,7 @@ class battle_grid:
     
 
     # Returns list of availabe moves for the given character and their position based on agilitiy value
-    def get_all_available_moves(self):
+    def get_characters_available_moves(self):
 
         # Needs to be adjusted to also calculate available moves based on tiles being moved through
 
@@ -164,7 +164,7 @@ class battle_grid:
             self.tile_selected_position = tile_position
             self.tile_selected = True
             self.selected_character = self.player_characters[int(self.grid_tile_info[tile_position[0]][tile_position[1]][5:7])-1]
-            self.get_all_available_moves()
+            self.get_characters_available_moves()
         return
     
 
