@@ -123,23 +123,23 @@ class battle_grid:
     
 
     # Returns list of availabe moves for the given character and their position based on agilitiy value
-    def get_characters_available_moves(self):
+    def get_characters_available_moves(self, character_tile_position):
 
         # Needs to be adjusted to also calculate available moves based on tiles being moved through
 
         available_moves = []
 
-        true_agility = self.selected_character.AGI + tile_agility[self.grid_tile_info[self.selected_tile_position[0]][self.selected_tile_position[1]][0]]
+        true_agility = self.selected_character.AGI + tile_agility[self.grid_tile_info[character_tile_position[0]][character_tile_position[1]][0]]
 
         # Makes sure true agility is always at least 1 (or else characters could get stuck on a tile if agility too low)
         if true_agility < 1:
             true_agility = 1
+        
 
-
-        available_moves.append([self.selected_tile_position[0]-1,self.selected_tile_position[1]])
-        available_moves.append([self.selected_tile_position[0]+1,self.selected_tile_position[1]])
-        available_moves.append([self.selected_tile_position[0],self.selected_tile_position[1]+1])
-        available_moves.append([self.selected_tile_position[0],self.selected_tile_position[1]-1])
+        available_moves.append([character_tile_position[0]-1,character_tile_position[1]])
+        available_moves.append([character_tile_position[0]+1,character_tile_position[1]])
+        available_moves.append([character_tile_position[0],character_tile_position[1]+1])
+        available_moves.append([character_tile_position[0],character_tile_position[1]-1])
         last_added_moves = available_moves.copy()
 
         # Determines all possible end tiles based on character agility
@@ -155,7 +155,7 @@ class battle_grid:
                 available_moves = list(set(available_moves) | set(temp_array))
                 last_added_moves = temp_array.copy()
 
-        self.available_move_tiles = available_moves.copy
+        return available_moves.copy()
 
     # Attempts to select tile
     def select_tile_attempt(self, tile_position):
@@ -164,7 +164,7 @@ class battle_grid:
             self.tile_selected_position = tile_position
             self.tile_selected = True
             self.selected_character = self.player_characters[int(self.grid_tile_info[tile_position[0]][tile_position[1]][5:7])-1]
-            self.get_characters_available_moves()
+            self.available_move_tiles = self.get_characters_available_moves(self.tile_selected_position)
         return
     
 
