@@ -1,5 +1,5 @@
 # Dictionary containing the effects on agility of each tile
-tile_agility ={ "G": 0,
+tile_agility = { "G": 0,
                 "D": 0,
                 "W": -2,
                 "M": -5
@@ -39,10 +39,13 @@ class character:
         self.ATK += 1
         self.DEF += 1
 
-    def attack_character(self,incoming_damage):
+    def take_damage(self,incoming_damage):
         self.current_HP -= (incoming_damage - self.DEF)
+
+        if self.current_HP < 0:
+            self.is_Dead = True
     
-    def heal_character(self, incoming_heal):
+    def receive_healing(self, incoming_heal):
         self.current_HP += incoming_heal
 
         # Prevents "overhealing"
@@ -63,15 +66,29 @@ class character:
 
     def decrease_max_HP(self,decrease_in_Max_HP):
         self.max_HP -= decrease_in_Max_HP
+        
+        if self.max_HP < 1:
+            self.max_HP = 1
 
     def decrease_ATK(self,decrease_in_ATK):
         self.ATK -= decrease_in_ATK
 
+        if self.ATK < 0:
+            self.ATK = 0
+
+
     def decrease_AGI(self,decrease_in_AGI):
         self.AGI -= decrease_in_AGI
 
+        if self.AGI < 1:
+            self.AGI = 1
+
+
     def decrease_DEF(self,decrease_in_DEF):
         self.DEF -= decrease_in_DEF
+
+        if self.DEF < 0:
+            self.DEF = 0
 
 
 
@@ -94,48 +111,25 @@ class battle_grid:
         self.tile_selected = False
         self.selected_tile_position = [-1,-1]
         self.available_move_tiles = None
+        self.selected_character = None
 
-        
+    # Sets the turn to be the player's
+    def set_turn_player(self):
+        self.player_turn = True
 
-
-
-    # Updates character position
-    def update_character_position(self,character_id, new_tile_position):
-
-        # Loops through the grid looking for tile with matching character_id, removes it from the tile and adds it to the new tile
-        for i in range(self.dimensions[0]):
-            for j in range(self.dimensions[1]):
-
-                if self.grid_tile_info[i][j][2:] == character_id:
-                    self.grid_tile_info[i][j] = self.grid_tile_info[i][j][:2] + "___"
-                    self.grid_tile_info[new_tile_position[0]][new_tile_position[1]] = self.grid_tile_info[new_tile_position[0]][new_tile_position[1]][:2]+character_id 
-        return
-
-
-    # Removes character from the grid
-    def remove_character(self, character_id):
-
-        # Loops through the grid looking for tile with matching character_id, removes it from the tile
-        for i in range(self.dimensions[0]):
-            for j in range(self.dimensions[1]):
-
-                if self.grid_tile_info[i][j][2:] == character_id:
-                    self.grid_tile_info[i][j] = self.grid_tile_info[i][j][:2] + "___"
-                    
-        return
-
-    # Updates grid tile type 
-    def update_tile_type(self, tile_position, new_tile_type):
-
-        self.grid_tile_info[tile_position[0]][tile_position[1]] = new_tile_type + self.grid_tile_info[tile_position[0]][tile_position[1]][1:]
-        return
+    # Sets the turn to be the opponents
+    def set_turn_opponent(self):
+        self.player_turn = False
+    
 
     # Returns list of availabe moves for the given character and their position based on agilitiy value
-    def get_all_available_moves(self, selected_character):
+    def get_all_available_moves(self):
+
+        # Needs to be adjusted to also calculate available moves based on tiles being moved through
 
         available_moves = []
 
-        true_agility = selected_character.AGI - tile_agility[self.grid_tile_info[self.selected_tile_position[0]][self.selected_tile_position[1]][0]]
+        true_agility = self.selected_character.AGI + tile_agility[self.grid_tile_info[self.selected_tile_position[0]][self.selected_tile_position[1]][0]]
 
         # Makes sure true agility is always at least 1 (or else characters could get stuck on a tile if agility too low)
         if true_agility < 1:
@@ -166,24 +160,45 @@ class battle_grid:
     # Attempts to select tile
     def select_tile_attempt(self, tile_position):
 
-        if self.grid_tile_info[tile_position[0]][tile_position[1]][2] == "P" and self.player_characters[int(self.grid_tile_info[tile_position[0]][tile_position[1]][3:5])-1].has_turn:
+        if self.grid_tile_info[tile_position[0]][tile_position[1]][4] == "P" and self.player_characters[int(self.grid_tile_info[tile_position[0]][tile_position[1]][5:7])-1].has_turn:
             self.tile_selected_position = tile_position
             self.tile_selected = True
-            character_index = int(self.grid_tile_info[tile_position[0]][tile_position[1]][3:5])-1
-            self.get_all_available_moves(self.player_characters[character_index])
+            self.selected_character = self.player_characters[int(self.grid_tile_info[tile_position[0]][tile_position[1]][5:7])-1]
+            self.get_all_available_moves()
         return
     
-    
 
-    # Attempts to make move from prior selected tile to newly selected tile
+    # Updates character position
+    def update_character_position(self, new_tile_position):
+
+        # Copies character id to new grid tile
+        character_id = self.grid_tile_info[self.selected_tile_position[0]][self.selected_tile_position[1]][4:7]
+        self.grid_tile_info[new_tile_position[0]][new_tile_position[1]][4:7] = character_id
+
+        # Removes character id from the prior tile
+        self.grid_tile_info[self.selected_tile_position[0]][self.selected_tile_position[1]][4:7] = "___"
+
+        return
+
+
+    # Attempts to make move from prior selected tile to newly selected tile, if selected tile is invalid unselect first tile
     def selected_tile_move_attempt(self, new_tile_position):
 
         if new_tile_position in self.available_move_tiles:
-            
-            if self.grid_tile_info[new_tile_position[0]][new_tile_position[1]][2] == "_":
-                pass
 
-        
-
-
-        
+            if self.grid_tile_info[new_tile_position[0]][new_tile_position[1]][4:7] == "___":
+                self.update_character_position(new_tile_position)
+                self.selected_character.has_turn = False
+                return
+            elif self.grid_tile_info[new_tile_position[0]][new_tile_position[1]][4] == "E":
+                enemy_character = self.opponent_characters[int(self.grid_tile_info[new_tile_position[0]][new_tile_position[1]][5:7]-1)]
+                enemy_character.take_damage(self.selected_character.ATK)
+                self.selected_character.has_turn = False
+                return
+            else:
+                self.tile_selected = False
+                self.selected_tile_position = [-1,-1]
+                self.available_move_tiles = None
+                self.selected_character = None
+                return
+                
