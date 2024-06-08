@@ -124,7 +124,7 @@ class Game:
         self.clock = pygame.time.Clock()
         pygame.display.set_caption(title)
         self.surface = pygame.display.set_mode((window_width, window_height))
-        self.BG_COLOR = (0, 255, 0)  # Use a tuple for color
+        self.BG_COLOR = ("green")
         self.running = True
         self.tiles = Tiles(self.surface)
         self.characters = Characters(self.surface)
