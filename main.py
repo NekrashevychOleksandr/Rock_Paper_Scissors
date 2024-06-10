@@ -21,6 +21,7 @@ screen_height = int(screen_info.current_h*0.8)
 
 
 
+
 # Set the display mode to the 80% of the screen resolution
 screen = pygame.display.set_mode((screen_width, screen_height))
 pygame.display.set_caption("Battle Sim")
@@ -105,6 +106,10 @@ while running:
 
     if button_Scissors.coordinates[0] <= mouse_x <= button_Scissors.coordinates[0] + button_Scissors.width and button_Scissors.coordinates[1] <= mouse_y <= button_Scissors.coordinates[1] + button_Scissors.height:
                 print("Scissors Button clicked!")
+                #Test example of menu button being clicked and opening up the game
+                mygame = Map_Display.Game()
+                mygame.main()
+                running=False
 
 #-----------------------------------------------------------------------------------------------------
     # Resets mouse click locations after each loop
