@@ -1,7 +1,6 @@
 import pygame
 import os
 
-# Title name, and tile size and amount and how it would fit into screen resolution.
 title = "grid_map"
 tiles_horizontal = 8
 tiles_vertical = 8
@@ -17,12 +16,9 @@ class Tile:
         self.y = int(y)
         self.tile_type = tile_type
 
-        
-# Here we can add the dictionary cases for the multiple tile images as desired
         tile_images = {
             "g01": "Media/Tiles/Grass_Tile.jpg",
             "d01": "Media/Tiles/Dirt_Tile.png",
-            # Add more mappings as needed
         }
 
         if tile_type in tile_images:
@@ -34,6 +30,10 @@ class Tile:
         self.image = pygame.image.load(filepath).convert_alpha()
         self.image = pygame.transform.scale(self.image, (tilesize, tilesize))
 
+    def set_offset(self, offset_x, offset_y):
+        self.rect.x += offset_x
+        self.rect.y += offset_y
+
     def debug_print(self):
         s = "id: {}, x: {}, y: {}, kind: {}"
         s = s.format(self.id, self.x, self.y, self.tile_type)
@@ -44,6 +44,7 @@ class Tiles:
         self.screen = screen
         self.inner = []
         self.load_data()
+        self.calculate_offset()
 
     def load_data(self):
         self.inner = []
@@ -63,6 +64,15 @@ class Tiles:
                 self.inner.append(new_tile)
                 id += 1
 
+    def calculate_offset(self):
+        map_width = tiles_horizontal * tilesize
+        map_height = tiles_vertical * tilesize
+        offset_x = (window_width - map_width) // 2
+        offset_y = (window_height - map_height) // 2
+
+        for tile in self.inner:
+            tile.set_offset(offset_x, offset_y)
+
     def draw(self, surface):
         if len(self.inner) == 0:
             raise ValueError("No Tiles to load in")
@@ -79,11 +89,9 @@ class Character_Display:
         self.x, self.y = int(x), int(y)
         self.myinc = 0.5
 
-#Here we can add multiple character or enemy images to be generated on the Map as desired
         character_images = {
             "P01": "Media/Sprites/test_character.png",
             "E01": "Media/Sprites/test_enemy.png",
-            # Add more mappings as needed
         }
 
         if character_kind in character_images:
@@ -94,8 +102,15 @@ class Character_Display:
         self.image = pygame.image.load(self.character_image).convert_alpha()
         self.image = pygame.transform.scale(self.image, (tilesize, tilesize))
 
+        # Initialize the rect attribute
+        self.rect = pygame.Rect(self.x * tilesize, self.y * tilesize, tilesize, tilesize)
+
+    def set_offset(self, offset_x, offset_y):
+        self.rect.x += offset_x
+        self.rect.y += offset_y
+
     def debug_print(self):
-        s = "id: {}, x: {}, y: {}".format(self.id, self.x, self.y)
+        s = "id: {}, x: {}, y: {}".format(self.id, self.rect.x, self.rect.y)
         print(s)
 
 class Characters_Display:
@@ -103,6 +118,7 @@ class Characters_Display:
         self.surface = surface
         self.inner = []
         self.load_data()
+        self.calculate_offset()
 
     def load_data(self):
         filepath = os.path.join("Maps", "Tile_Map_Test.txt")
@@ -114,18 +130,26 @@ class Characters_Display:
         for count_i, line in enumerate(mylines):
             temp_list = line.split(";")
             for count_j, elem in enumerate(temp_list):
-                if len(elem.split("_")) > 1 and elem.split("_")[1] in ["P01","E01"]:
+                if len(elem.split("_")) > 1 and elem.split("_")[1] in ["P01", "E01"]:
                     character_kind = elem.split("_")[1]
                     new_character = Character_Display(id, count_j, count_i, character_kind)
                     self.inner.append(new_character)
                     id += 1
 
+    def calculate_offset(self):
+        map_width = tiles_horizontal * tilesize
+        map_height = tiles_vertical * tilesize
+        offset_x = (window_width - map_width) // 2
+        offset_y = (window_height - map_height) // 2
+
+        for character in self.inner:
+            character.set_offset(offset_x, offset_y)
+
     def draw(self):
         if len(self.inner) == 0:
             raise ValueError("No characters to display")
         for elem in self.inner:
-            myrect = pygame.Rect(elem.x * tilesize, elem.y * tilesize, tilesize, tilesize)
-            self.surface.blit(elem.image, myrect)
+            self.surface.blit(elem.image, elem.rect)
 
     def debug_print(self):
         for elem in self.inner:
@@ -164,7 +188,6 @@ class Game:
             self.events()
             self.update()
             self.draw()
-    
 
 if __name__ == "__main__":
     mygame = Game()

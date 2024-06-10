@@ -19,7 +19,8 @@ screen_info = pygame.display.Info()
 screen_width = int(screen_info.current_w*0.8)
 screen_height = int(screen_info.current_h*0.8)
 
-
+Map_Display.window_height= screen_height
+Map_Display.window_width= screen_width
 
 
 # Set the display mode to the 80% of the screen resolution
