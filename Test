@@ -17,12 +17,18 @@ class Tile:
         self.y = int(y)
         self.tile_type = tile_type
 
-        if tile_type == "g01":
-            filepath = "Media/Tiles/Grass_Tile.jpg"
-        elif tile_type == "d01":
-            filepath = "Media/Tiles/Dirt_Tile.png"
+        
+# Here we can add the dictionary cases for the multiple tile images as desired
+        tile_images = {
+            "g01": "Media/Tiles/Grass_Tile.jpg",
+            "d01": "Media/Tiles/Dirt_Tile.png",
+            # Add more mappings as needed
+        }
+
+        if tile_type in tile_images:
+            filepath = tile_images[tile_type]
         else:
-            raise ValueError("Error: Tile Type", tile_type)
+            raise ValueError(f"Error: Tile Type {tile_type}")
 
         self.rect = pygame.Rect(self.x * tilesize, self.y * tilesize, tilesize, tilesize)
         self.image = pygame.image.load(filepath).convert_alpha()
@@ -73,12 +79,17 @@ class Character:
         self.x, self.y = int(x), int(y)
         self.myinc = 0.5
 
-        if character_kind == "P01":
-            self.character_image = "Media/Sprites/test_character.png"
-        elif character_kind == "E01":
-            self.character_image = "Media/Sprites/test_enemy.png"
+#Here we can add multiple character or enemy images to be generated on the Map as desired
+        character_images = {
+            "P01": "Media/Sprites/test_character.png",
+            "E01": "Media/Sprites/test_enemy.png",
+            # Add more mappings as needed
+        }
+
+        if character_kind in character_images:
+            self.character_image = character_images[character_kind]
         else:
-            raise ValueError("Sorry, do not recognize that: {}".format(character_kind))
+            raise ValueError(f"Sorry, do not recognize that: {character_kind}")
 
         self.image = pygame.image.load(self.character_image).convert_alpha()
         self.image = pygame.transform.scale(self.image, (tilesize, tilesize))
@@ -153,6 +164,7 @@ class Game:
             self.events()
             self.update()
             self.draw()
+    
 
 if __name__ == "__main__":
     mygame = Game()
