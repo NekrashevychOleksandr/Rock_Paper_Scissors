@@ -15,10 +15,14 @@ pygame.init()
 script_dir = os.path.dirname(__file__)
 
 # Get the screen resolution
+
 screen_info = pygame.display.Info()
 screen_width = int(screen_info.current_w*0.8)
 screen_height = int(screen_info.current_h*0.8)
 
+# This is a test case scenario for readjustment of the grid display to fit the screen resolution. 
+# To test, run Main.py, and click the scissors button
+Map_Display.tilesize = ((screen_height/Map_Display.tiles_vertical))
 Map_Display.window_height= screen_height
 Map_Display.window_width= screen_width
 
