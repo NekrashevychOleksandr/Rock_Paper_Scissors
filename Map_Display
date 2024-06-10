@@ -73,7 +73,7 @@ class Tiles:
         for elem in self.inner:
             elem.debug_print()
 
-class Character:
+class Character_Display:
     def __init__(self, id, x, y, character_kind):
         self.id = id
         self.x, self.y = int(x), int(y)
@@ -98,7 +98,7 @@ class Character:
         s = "id: {}, x: {}, y: {}".format(self.id, self.x, self.y)
         print(s)
 
-class Characters:
+class Characters_Display:
     def __init__(self, surface):
         self.surface = surface
         self.inner = []
@@ -116,7 +116,7 @@ class Characters:
             for count_j, elem in enumerate(temp_list):
                 if len(elem.split("_")) > 1 and elem.split("_")[1] in ["P01","E01"]:
                     character_kind = elem.split("_")[1]
-                    new_character = Character(id, count_j, count_i, character_kind)
+                    new_character = Character_Display(id, count_j, count_i, character_kind)
                     self.inner.append(new_character)
                     id += 1
 
@@ -140,7 +140,7 @@ class Game:
         self.BG_COLOR = ("green")
         self.running = True
         self.tiles = Tiles(self.surface)
-        self.characters = Characters(self.surface)
+        self.characters = Characters_Display(self.surface)
 
     def events(self):
         for event in pygame.event.get():
