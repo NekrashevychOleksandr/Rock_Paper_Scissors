@@ -75,6 +75,8 @@ class Character:
 
         if character_kind == "P01":
             self.character_image = "Media/Sprites/test_character.png"
+        elif character_kind == "E01":
+            self.character_image = "Media/Sprites/test_enemy.png"
         else:
             raise ValueError("Sorry, do not recognize that: {}".format(character_kind))
 
@@ -101,7 +103,7 @@ class Characters:
         for count_i, line in enumerate(mylines):
             temp_list = line.split(";")
             for count_j, elem in enumerate(temp_list):
-                if len(elem.split("_")) > 1 and elem.split("_")[1] == "P01":
+                if len(elem.split("_")) > 1 and elem.split("_")[1] in ["P01","E01"]:
                     character_kind = elem.split("_")[1]
                     new_character = Character(id, count_j, count_i, character_kind)
                     self.inner.append(new_character)
