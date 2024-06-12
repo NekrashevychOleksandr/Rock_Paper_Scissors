@@ -78,7 +78,7 @@ class Game:
             self.events()
             self.update()
             self.draw()
-            print(self.tiles.inner.)
+            print(self.tiles.inner)
 
 if __name__ == "__main__":
     mygame = Game()
