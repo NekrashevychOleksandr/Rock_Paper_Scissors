@@ -1,7 +1,7 @@
 import pygame
 import os
 
-maps_list = {"test_Map_0":"test_map_0.txt"} 
+maps_list = {"test_Map_0":"test_Map_0.txt"}
 
 class Tile:
     def __init__(self, id, x, y, tile_type,tile_size):
@@ -77,7 +77,7 @@ class Tiles:
         Load the tile data from a file and initialize Tile objects.
         """
         self.inner = []
-        filepath = os.path.join("Maps", "test_map_0.txt")
+        filepath = os.path.join("Maps", "test_Map_0.txt")
         with open(filepath, "r") as f:
             mylines = f.readlines()
             mylines = [i.strip() for i in mylines if len(i.strip()) > 0]
@@ -194,7 +194,7 @@ class Characters_Display:
         """
         Load the character data from a file and initialize Character_Display objects.
         """
-        filepath = os.path.join("Maps", "test_map_0.txt")
+        filepath = os.path.join("Maps", "test_Map_0.txt")
         with open(filepath, "r") as f:
             mylines = f.readlines()
             mylines = [i.strip() for i in mylines if len(i.strip()) > 0]
