@@ -2,6 +2,18 @@ import pygame
 import os
 
 maps_list = {"test_Map_0":"test_Map_0.txt"}
+# Dictionary to map tile types to image file paths
+tile_images = {
+            "g01": "Media/Tiles/Grass_Tile.jpg",
+            "d01": "Media/Tiles/Dirt_Tile.png",
+        }
+
+# Dictionary to map character types to image file paths
+character_images = {
+            "P01": "Media/Sprites/test_character.png",
+            "E01": "Media/Sprites/test_enemy.png",
+        }
+
 
 class Tile:
     def __init__(self, id, x, y, tile_type,tile_size):
@@ -19,11 +31,7 @@ class Tile:
         self.tile_type = tile_type
         self.tile_size = tile_size
 
-        # Dictionary to map tile types to image file paths
-        tile_images = {
-            "g01": "Media/Tiles/Grass_Tile.jpg",
-            "d01": "Media/Tiles/Dirt_Tile.png",
-        }
+        
 
         # Load the appropriate image based on the tile type
         if tile_type in tile_images:
@@ -70,8 +78,6 @@ class Tiles:
         self.calculate_offset()
         
         
-
-
     def load_data(self):
         """
         Load the tile data from a file and initialize Tile objects.
@@ -138,11 +144,6 @@ class Character_Display:
         self.myinc = 0.5
         self.tile_size = tile_size
 
-        # Dictionary to map character types to image file paths
-        character_images = {
-            "P01": "Media/Sprites/test_character.png",
-            "E01": "Media/Sprites/test_enemy.png",
-        }
 
         # Load the appropriate image based on the character kind
         if character_kind in character_images:
