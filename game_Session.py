@@ -27,6 +27,9 @@ class Game:
         # Default board dimensions will be pulled from a file later
         self.board_dimensions = [8,8]
 
+
+
+
         # Calculate the dynamic tile size
         # minimum of the height and breadth because the tiles will always be square and could thus not fit into the screen
         self.tile_size = min(self.window_width // self.board_dimensions[0], self.window_height // self.board_dimensions[1])
@@ -49,6 +52,13 @@ class Game:
         """
         Update the game state. Currently does nothing, but can be extended.
         """
+        pass
+
+    def get_map_data(self):
+        
+        
+
+        
         pass
 
     def draw(self):
