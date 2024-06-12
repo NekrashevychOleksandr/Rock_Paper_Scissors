@@ -1,5 +1,5 @@
 import pygame
-import map_Display
+import Map_Display
 
 
 class Game:
