@@ -1,6 +1,6 @@
 import pygame
 import frontend
-import backend
+import Map_Data
 import os
 import Map_Display
 

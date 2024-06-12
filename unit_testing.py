@@ -2,7 +2,7 @@
 
 # Backend classes Unit testing
 # -----------------------------------------------------------------------------------------
-import backend
+import Map_Data
 
 #   Batte_Grid Class
 
@@ -15,4 +15,4 @@ battle_grid_info = [["G00*___","G00*O01"],
 UT_player_characters = []
 UT_opponent_characters = []
 
-battle_grid = backend.battle_grid(dimensions, battle_grid_info, UT_player_characters,UT_opponent_characters,)
+battle_grid = Map_Data.battle_grid(dimensions, battle_grid_info, UT_player_characters,UT_opponent_characters,)
