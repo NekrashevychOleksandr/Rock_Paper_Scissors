@@ -27,12 +27,9 @@ class Game:
         # Default board dimensions will be pulled from a file later
         self.board_dimensions = [8,8]
 
-        self.tile_size = (self.window_width * self.window_height)//(self.board_dimensions[0]*self.board_dimensions[1])
-        print(self.tile_size)
-        #window_width = tilesize * tiles_horizontal
-        #window_height = tilesize * tiles_vertical
+        # Calculate the dynamic tile size
+        self.tile_size = min(self.window_width // self.board_dimensions[0], self.window_height // self.board_dimensions[1])
 
-        self.tile_size = 100
         self.tiles = map_Display.Tiles(self.surface, self.board_dimensions, self.tile_size, self.window_width, self.window_height)
         self.characters = map_Display.Characters_Display(self.surface, self.board_dimensions, self.tile_size, self.window_width, self.window_height)
 
