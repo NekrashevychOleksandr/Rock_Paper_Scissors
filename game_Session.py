@@ -12,19 +12,29 @@ class Game:
         pygame.display.set_caption("Placeholder Game Name")
 
         # Get the current screen resolution
-        screen_info = pygame.display.Info()
-        screen_width = screen_info.current_w
-        screen_height = screen_info.current_h
+        self.screen_info = pygame.display.Info()
+        self.screen_width = self.screen_info.current_w
+        self.screen_height = self.screen_info.current_h
 
         # Calculate 80% of the screen resolution
-        window_width = int(screen_width * 0.8)
-        window_height = int(screen_height * 0.8)
+        self.window_width = int(self.screen_width * 0.8)
+        self.window_height = int(self.screen_height * 0.8)
 
-        self.surface = pygame.display.set_mode((window_width, window_height))
+        self.surface = pygame.display.set_mode((self.window_width, self.window_height))
         self.BG_COLOR = ("green")
         self.running = True
-        self.tiles = map_Display.Tiles(self.surface)
-        self.characters = map_Display.Characters_Display(self.surface)
+
+        # Default board dimensions will be pulled from a file later
+        self.board_dimensions = [8,8]
+
+        self.tile_size = (self.window_width * self.window_height)//(self.board_dimensions[0]*self.board_dimensions[1])
+        print(self.tile_size)
+        #window_width = tilesize * tiles_horizontal
+        #window_height = tilesize * tiles_vertical
+
+        self.tile_size = 100
+        self.tiles = map_Display.Tiles(self.surface, self.board_dimensions, self.tile_size, self.window_width, self.window_height)
+        self.characters = map_Display.Characters_Display(self.surface, self.board_dimensions, self.tile_size, self.window_width, self.window_height)
 
     def events(self):
         """

@@ -2,17 +2,17 @@ import pygame
 import os
 
 # Constants for the game
-title = "grid_map"
-tiles_horizontal = 8
-tiles_vertical = 8
-tilesize = 64
+#title = "grid_map"
+#tiles_horizontal = 8
+#tiles_vertical = 8
+#tilesize = 64
 
 # Window dimensions
-window_width = tilesize * tiles_horizontal
-window_height = tilesize * tiles_vertical
+#window_width = tilesize * tiles_horizontal
+#window_height = tilesize * tiles_vertical
 
 class Tile:
-    def __init__(self, id, x, y, tile_type):
+    def __init__(self, id, x, y, tile_type,tile_size):
         """
         Initialize a tile.
 
@@ -25,6 +25,7 @@ class Tile:
         self.x = int(x)
         self.y = int(y)
         self.tile_type = tile_type
+        self.tile_size = tile_size
 
         # Dictionary to map tile types to image file paths
         tile_images = {
@@ -38,9 +39,9 @@ class Tile:
         else:
             raise ValueError(f"Error: Tile Type {tile_type}")
 
-        self.rect = pygame.Rect(self.x * tilesize, self.y * tilesize, tilesize, tilesize)
+        self.rect = pygame.Rect(self.x * self.tile_size, self.y * self.tile_size, self.tile_size, self.tile_size)
         self.image = pygame.image.load(filepath).convert_alpha()
-        self.image = pygame.transform.scale(self.image, (tilesize, tilesize))
+        self.image = pygame.transform.scale(self.image, (self.tile_size, self.tile_size))
 
     def set_offset(self, offset_x, offset_y):
         """
@@ -60,16 +61,24 @@ class Tile:
         print(s)
 
 class Tiles:
-    def __init__(self, screen):
+    def __init__(self, screen, board_dimensions, tile_size, window_width, window_height):
         """
         Initialize the Tiles manager.
 
         :param screen: Pygame surface to draw tiles on.
         """
+        self.tiles_horizontal = board_dimensions[0]
+        self.tiles_vertical = board_dimensions[1]
+        self.tile_size = tile_size
+        self.window_width = window_width
+        self.window_height = window_height
         self.screen = screen
         self.inner = []
         self.load_data()
         self.calculate_offset()
+        
+        
+
 
     def load_data(self):
         """
@@ -88,7 +97,7 @@ class Tiles:
 
             for count_j, elem in enumerate(temp_list):
                 tile_type = elem.split("_")[0]
-                new_tile = Tile(id, count_j, count_i, tile_type)
+                new_tile = Tile(id, count_j, count_i, tile_type, self.tile_size)
                 self.inner.append(new_tile)
                 id += 1
 
@@ -96,10 +105,10 @@ class Tiles:
         """
         Calculate the offset to center the map on the screen.
         """
-        map_width = tiles_horizontal * tilesize
-        map_height = tiles_vertical * tilesize
-        offset_x = (window_width - map_width) // 2
-        offset_y = (window_height - map_height) // 2
+        map_width = self.tiles_horizontal * self.tile_size
+        map_height = self.tiles_vertical * self.tile_size
+        offset_x = (self.window_width - map_width) // 2
+        offset_y = (self.window_height - map_height) // 2
 
         for tile in self.inner:
             tile.set_offset(offset_x, offset_y)
@@ -123,7 +132,7 @@ class Tiles:
             elem.debug_print()
 
 class Character_Display:
-    def __init__(self, id, x, y, character_kind):
+    def __init__(self, id, x, y, character_kind, tile_size):
         """
         Initialize a character.
 
@@ -135,6 +144,7 @@ class Character_Display:
         self.id = id
         self.x, self.y = int(x), int(y)
         self.myinc = 0.5
+        self.tile_size = tile_size
 
         # Dictionary to map character types to image file paths
         character_images = {
@@ -149,10 +159,10 @@ class Character_Display:
             raise ValueError(f"Sorry, do not recognize that: {character_kind}")
 
         self.image = pygame.image.load(self.character_image).convert_alpha()
-        self.image = pygame.transform.scale(self.image, (tilesize, tilesize))
+        self.image = pygame.transform.scale(self.image, (self.tile_size, self.tile_size))
 
         # Initialize the rect attribute
-        self.rect = pygame.Rect(self.x * tilesize, self.y * tilesize, tilesize, tilesize)
+        self.rect = pygame.Rect(self.x * self.tile_size, self.y * self.tile_size, self.tile_size, self.tile_size)
 
     def set_offset(self, offset_x, offset_y):
         """
@@ -172,7 +182,7 @@ class Character_Display:
         print(s)
 
 class Characters_Display:
-    def __init__(self, surface):
+    def __init__(self, surface, board_dimensions, tile_size, window_width, window_height):
         """
         Initialize the Characters_Display manager.
 
@@ -180,6 +190,11 @@ class Characters_Display:
         """
         self.surface = surface
         self.inner = []
+        self.tile_size = tile_size
+        self.tiles_horizontal = board_dimensions[0]
+        self.tiles_vertical = board_dimensions[1]
+        self.window_width = window_width
+        self.window_height = window_height
         self.load_data()
         self.calculate_offset()
 
@@ -198,7 +213,7 @@ class Characters_Display:
             for count_j, elem in enumerate(temp_list):
                 if len(elem.split("_")) > 1 and elem.split("_")[1] in ["P01", "E01"]:
                     character_kind = elem.split("_")[1]
-                    new_character = Character_Display(id, count_j, count_i, character_kind)
+                    new_character = Character_Display(id, count_j, count_i, character_kind, self.tile_size)
                     self.inner.append(new_character)
                     id += 1
 
@@ -206,10 +221,10 @@ class Characters_Display:
         """
         Calculate the offset to center the characters on the screen.
         """
-        map_width = tiles_horizontal * tilesize
-        map_height = tiles_vertical * tilesize
-        offset_x = (window_width - map_width) // 2
-        offset_y = (window_height - map_height) // 2
+        map_width = self.tiles_horizontal * self.tile_size
+        map_height = self.tiles_vertical * self.tile_size
+        offset_x = (self.window_width - map_width) // 2
+        offset_y = (self.window_height - map_height) // 2
 
         for character in self.inner:
             character.set_offset(offset_x, offset_y)
@@ -229,56 +244,3 @@ class Characters_Display:
         """
         for elem in self.inner:
             elem.debug_print()
-
-class Game:
-    def __init__(self):
-        """
-        Initialize the game, setting up the window, clock, and game elements.
-        """
-        pygame.init()
-        self.clock = pygame.time.Clock()
-        pygame.display.set_caption(title)
-        self.surface = pygame.display.set_mode((window_width, window_height))
-        self.BG_COLOR = ("green")
-        self.running = True
-        self.tiles = Tiles(self.surface)
-        self.characters = Characters_Display(self.surface)
-
-    def events(self):
-        """
-        Handle user input and events like quitting the game or pressing the escape key.
-        """
-        for event in pygame.event.get():
-            if event.type == pygame.QUIT:
-                self.running = False
-            elif event.type == pygame.KEYDOWN:
-                if event.key == pygame.K_ESCAPE:
-                    self.running = False
-
-    def update(self):
-        """
-        Update the game state. Currently does nothing, but can be extended.
-        """
-        pass
-
-    def draw(self):
-        """
-        Clear the screen, draw tiles and characters, and update the display.
-        """
-        self.surface.fill(self.BG_COLOR)
-        self.tiles.draw(self.surface)
-        self.characters.draw()
-        pygame.display.update()
-
-    def start_game_session(self):
-        """
-        Main game loop that handles events, updates, and drawing.
-        """
-        while self.running:
-            self.events()
-            self.update()
-            self.draw()
-
-if __name__ == "__main__":
-    mygame = Game()
-    mygame.start_game_session()
