@@ -28,6 +28,7 @@ class Game:
         self.board_dimensions = [8,8]
 
         # Calculate the dynamic tile size
+        # minimum of the height and breadth because the tiles will always be square and could thus not fit into the screen
         self.tile_size = min(self.window_width // self.board_dimensions[0], self.window_height // self.board_dimensions[1])
 
         self.tiles = map_Display.Tiles(self.surface, self.board_dimensions, self.tile_size, self.window_width, self.window_height)

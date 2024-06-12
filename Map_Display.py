@@ -1,15 +1,7 @@
 import pygame
 import os
 
-# Constants for the game
-#title = "grid_map"
-#tiles_horizontal = 8
-#tiles_vertical = 8
-#tilesize = 64
-
-# Window dimensions
-#window_width = tilesize * tiles_horizontal
-#window_height = tilesize * tiles_vertical
+maps_list = {"test_Map_0":"test_map_0.txt"} 
 
 class Tile:
     def __init__(self, id, x, y, tile_type,tile_size):
@@ -85,7 +77,7 @@ class Tiles:
         Load the tile data from a file and initialize Tile objects.
         """
         self.inner = []
-        filepath = os.path.join("Maps", "Tile_Map_Test.txt")
+        filepath = os.path.join("Maps", "test_map_0.txt")
         with open(filepath, "r") as f:
             mylines = f.readlines()
             mylines = [i.strip() for i in mylines if len(i.strip()) > 0]
@@ -96,7 +88,7 @@ class Tiles:
             temp_list = [i.strip() for i in temp_list if len(i.strip()) > 0]
 
             for count_j, elem in enumerate(temp_list):
-                tile_type = elem.split("_")[0]
+                tile_type = elem.split("*")[0]
                 new_tile = Tile(id, count_j, count_i, tile_type, self.tile_size)
                 self.inner.append(new_tile)
                 id += 1
@@ -202,7 +194,7 @@ class Characters_Display:
         """
         Load the character data from a file and initialize Character_Display objects.
         """
-        filepath = os.path.join("Maps", "Tile_Map_Test.txt")
+        filepath = os.path.join("Maps", "test_map_0.txt")
         with open(filepath, "r") as f:
             mylines = f.readlines()
             mylines = [i.strip() for i in mylines if len(i.strip()) > 0]
@@ -211,8 +203,8 @@ class Characters_Display:
         for count_i, line in enumerate(mylines):
             temp_list = line.split(";")
             for count_j, elem in enumerate(temp_list):
-                if len(elem.split("_")) > 1 and elem.split("_")[1] in ["P01", "E01"]:
-                    character_kind = elem.split("_")[1]
+                if len(elem.split("*")) > 1 and elem.split("*")[1] in ["P01", "E01"]:
+                    character_kind = elem.split("*")[1]
                     new_character = Character_Display(id, count_j, count_i, character_kind, self.tile_size)
                     self.inner.append(new_character)
                     id += 1
