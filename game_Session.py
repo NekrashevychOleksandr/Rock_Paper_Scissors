@@ -1,6 +1,5 @@
 import pygame
-import Map_Display
-import Map_Data
+import map_Display
 
 
 class Game:
@@ -10,12 +9,22 @@ class Game:
         """
         pygame.init()
         self.clock = pygame.time.Clock()
-        pygame.display.set_caption(title)
+        pygame.display.set_caption("Placeholder Game Name")
+
+        # Get the current screen resolution
+        screen_info = pygame.display.Info()
+        screen_width = screen_info.current_w
+        screen_height = screen_info.current_h
+
+        # Calculate 80% of the screen resolution
+        window_width = int(screen_width * 0.8)
+        window_height = int(screen_height * 0.8)
+
         self.surface = pygame.display.set_mode((window_width, window_height))
         self.BG_COLOR = ("green")
         self.running = True
-        self.tiles = Tiles(self.surface)
-        self.characters = Characters_Display(self.surface)
+        self.tiles = map_Display.Tiles(self.surface)
+        self.characters = map_Display.Characters_Display(self.surface)
 
     def events(self):
         """
