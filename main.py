@@ -1,6 +1,6 @@
 import game_Session
-import Map_Data
-import Map_Display
+import map_Data
+import map_Display
 
 if __name__ == "__main__":
 

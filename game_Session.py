@@ -1,5 +1,5 @@
 import pygame
-import Map_Display
+import map_Display
 
 
 class Game:
@@ -31,8 +31,8 @@ class Game:
         # minimum of the height and breadth because the tiles will always be square and could thus not fit into the screen
         self.tile_size = min(self.window_width // self.board_dimensions[0], self.window_height // self.board_dimensions[1])
 
-        self.tiles = Map_Display.Tiles(self.surface, self.board_dimensions, self.tile_size, self.window_width, self.window_height)
-        self.characters = Map_Display.Characters_Display(self.surface, self.board_dimensions, self.tile_size, self.window_width, self.window_height)
+        self.tiles = map_Display.Tiles(self.surface, self.board_dimensions, self.tile_size, self.window_width, self.window_height)
+        self.characters = map_Display.Characters_Display(self.surface, self.board_dimensions, self.tile_size, self.window_width, self.window_height)
 
     def events(self):
         """
