@@ -1,5 +1,4 @@
 import pygame
-import numpy as np
 import os
 
 maps_list = {"test_Map_0":"test_Map_0.txt"}
@@ -218,6 +217,9 @@ class Characters_Display:
             for x in range(self.tiles_horizontal):
                 if grid_tile_info[y][x][4] == "E" or grid_tile_info[y][x][4] == "P":
                     self.inner.append(Character_Display(x, y, grid_tile_info[y][x][4:7], self.tile_size))
+
+        #print(grid_tile_info)
+        #print("\n")
 
 
     def calculate_offset(self):

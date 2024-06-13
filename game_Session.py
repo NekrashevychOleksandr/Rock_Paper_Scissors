@@ -19,8 +19,8 @@ class Game:
         self.screen_height = self.screen_info.current_h
 
         # Calculate 80% of the screen resolution
-        self.window_width = int(self.screen_width * 0.8)
-        self.window_height = int(self.screen_height * 0.8)
+        self.window_width = int(self.screen_width * 0.6)
+        self.window_height = int(self.screen_height * 0.6)
 
         self.surface = pygame.display.set_mode((self.window_width, self.window_height))
         self.BG_COLOR = ("black")
@@ -123,11 +123,12 @@ class Game:
 
             if not self.battle_grid.tile_selected:
                 self.battle_grid.select_tile_attempt(tile_coords)
-                print(f"Left click: tile selected [Row: {tile_coords[0]}, Column: {tile_coords[1]}]")
+                print(f"Left click: tile selected [Row: {tile_coords[0]}, Column: {tile_coords[1]}]\n")
+                #print(self.battle_grid.grid_tile_info)
             else:
                 self.battle_grid.selected_tile_move_attempt(tile_coords)
-                print(f"Left click: tile selected and move made to [Row: {tile_coords[0]}, Column: {tile_coords[1]}]")
-
+                print(f"Left click: tile selected and move made to [Row: {tile_coords[0]}, Column: {tile_coords[1]}]\n")
+                #print(self.battle_grid.grid_tile_info)
             
 
     def handle_right_click(self, x, y):
