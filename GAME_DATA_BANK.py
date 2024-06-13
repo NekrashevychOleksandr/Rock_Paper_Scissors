@@ -29,3 +29,19 @@ class CHARACTER_IMAGE_FILE_PATHS:
             "P01": "Media/Sprites/test_character.png",
             "E01": "Media/Sprites/test_enemy.png",
         }
+
+
+class CHARACTER_STATUSES:
+    def __init__(self) -> None:
+        self.DATA = {
+            # (current_HP, max_HP, ATK, SHIELD, AGI)
+            "POISON": (-1,0,0,0,0),
+            "BLEED": (-1,0,0,0,0),
+        }      
+
+class CHARACTER_EQUIPMENT:
+    def __init__(self) -> None:
+        self.DATA = {
+            # (current_HP, max_HP, ATK, SHIELD, AGI)
+            "SMALL_SHIELD": (0,0,0,1,0)
+        }     
