@@ -68,8 +68,9 @@ class Game:
         """
         Load map data from a text file and populate self.map_data.
         """
+        current_map= "test_Map_0.txt" # later we can add in the map list
         self.map_data = []
-        filepath = os.path.join("Maps", "test_Map_0.txt")  # Adjust path as per your file structure
+        filepath = os.path.join("Maps",current_map)  # Adjust path as per your file structure
 
         try:
             with open(filepath, "r") as f:
@@ -82,11 +83,6 @@ class Game:
         except FileNotFoundError:
             print(f"Error: Map file not found at {filepath}")
             # Optionally, handle the error (e.g., load default map or exit game)
-
-        # Print loaded map data for debugging
-        print("Loaded map data:")
-        for row in self.map_data:
-            print(row)
 
     def events(self):
         """
