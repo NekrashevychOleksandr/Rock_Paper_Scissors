@@ -1,6 +1,7 @@
 import pygame
 import map_Display
 import map_Data
+import os
 
 
 class Game:
@@ -62,6 +63,30 @@ class Game:
         self.tiles = map_Display.Tiles(self.surface, self.battle_grid.grid_tile_info, self.tile_size, self.window_width, self.window_height)
         self.characters = map_Display.Characters_Display(self.surface, self.battle_grid.grid_tile_info, self.tile_size, self.window_width, self.window_height)
         self.tile_coordinates = self.tiles.get_tile_coordinate_ranges()
+    
+    def load_map(self):
+        """
+        Load map data from a text file and populate self.map_data.
+        """
+        self.map_data = []
+        filepath = os.path.join("Maps", "test_Map_0.txt")  # Adjust path as per your file structure
+
+        try:
+            with open(filepath, "r") as f:
+                for line in f:
+                    line = line.strip()
+                    if line:
+                        # Split line into parts separated by ";", strip each part of whitespace
+                        temp_list = [part.strip() for part in line.split(";") if part.strip()]
+                        self.map_data.append(temp_list)
+        except FileNotFoundError:
+            print(f"Error: Map file not found at {filepath}")
+            # Optionally, handle the error (e.g., load default map or exit game)
+
+        # Print loaded map data for debugging
+        print("Loaded map data:")
+        for row in self.map_data:
+            print(row)
 
     def events(self):
         """
@@ -146,8 +171,8 @@ class Game:
         """
         while self.running:
             self.events()
+            self.load_map()
             self.update()
-            self.draw()
             
 
 if __name__ == "__main__":
