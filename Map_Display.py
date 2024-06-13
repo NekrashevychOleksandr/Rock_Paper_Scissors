@@ -1,19 +1,9 @@
 import pygame
-import os
+import GAME_DATA_BANK
 
-maps_list = {"test_Map_0":"test_Map_0.txt"}
-
-# Dictionary to map tile types to image file paths
-tile_images = {
-            "g01": "Media/Tiles/Grass_Tile.jpg",
-            "d01": "Media/Tiles/Dirt_Tile.png",
-        }
-
-# Dictionary to map character types to image file paths
-character_images = {
-            "P01": "Media/Sprites/test_character.png",
-            "E01": "Media/Sprites/test_enemy.png",
-        }
+GRID_BATTLE_MAPS = GAME_DATA_BANK.GRID_BATTLE_MAPS.DATA
+TILE_IMAGE_FILE_PATHS = GAME_DATA_BANK.TILE_IMAGE_FILE_PATHS.DATA
+CHARACTER_IMAGE_FILE_PATHS = GAME_DATA_BANK.CHARACTER_IMAGE_FILE_PATHS.DATA
 
 
 class Tile:
@@ -35,8 +25,8 @@ class Tile:
         
 
         # Load the appropriate image based on the tile type
-        if tile_type in tile_images:
-            filepath = tile_images[tile_type]
+        if tile_type in TILE_IMAGE_FILE_PATHS:
+            filepath = TILE_IMAGE_FILE_PATHS[tile_type]
         else:
             raise ValueError(f"Error: Tile Type {tile_type}")
 
@@ -162,8 +152,8 @@ class Character_Display:
 
 
         # Load the appropriate image based on the character kind
-        if character_kind in character_images:
-            self.character_image = character_images[character_kind]
+        if character_kind in CHARACTER_IMAGE_FILE_PATHS:
+            self.character_image = CHARACTER_IMAGE_FILE_PATHS[character_kind]
         else:
             raise ValueError(f"Sorry, do not recognize that: {character_kind}")
 

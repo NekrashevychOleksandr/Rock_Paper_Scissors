@@ -1,10 +1,9 @@
+import GAME_DATA_BANK
+
 # Dictionary containing the effects on agility of each tile
-tile_agility = { 
-    "g": 0,   # Grass
-    "d": 0,   # Dirt
-    "w": -2,  # Water
-    "m": -5   # Mountain
-}
+TILE_AGILITY_EFFECTS = GAME_DATA_BANK.TILE_AGILITY_EFFECTS.DATA
+
+
 
 # AI bot responsible for making moves of NPC pieces
 class AI_bot:
@@ -16,7 +15,7 @@ class AI_bot:
 
 # Represents characters on the grid
 class Character:
-    def __init__(self, titles, name, character_id, LVL, current_HP, max_HP, ATK, DEF, AGI, statuses, equipment):
+    def __init__(self, titles, name, character_id, LVL, current_HP, max_HP, ATK, SHIELD, AGI, statuses, equipment, character_position):
         """
         Initialize a character.
 
@@ -39,22 +38,20 @@ class Character:
         self.current_HP = current_HP
         self.max_HP = max_HP
         self.ATK = ATK
-        self.DEF = DEF
+        self.SHIELD = SHIELD
         self.AGI = AGI
         self.statuses = statuses
         self.equipment = equipment
         self.is_Dead = False
         self.has_turn = True
+        self.character_position = character_position
 
     def LVL_up(self):
         """
-        Level up the character, increasing stats.
+        Level up the character.
         """
         self.LVL += 1
-        self.max_HP += 1 
-        self.AGI += 1
-        self.ATK += 1
-        self.DEF += 1
+        
 
     def take_damage(self, incoming_damage):
         """
@@ -62,9 +59,17 @@ class Character:
 
         :param incoming_damage: Amount of damage to take.
         """
-        self.current_HP -= (incoming_damage - self.DEF)
 
-        if self.current_HP < 0:
+        if self.SHIELD > 0:
+            incoming_damage -= self.SHIELD
+
+            if incoming_damage < 0:
+                self.SHIELD = -(incoming_damage)
+                return
+
+        self.current_HP -= incoming_damage
+
+        if self.current_HP <= 0:
             self.is_Dead = True
 
     def receive_healing(self, incoming_heal):
@@ -103,13 +108,13 @@ class Character:
         """
         self.AGI += increase_in_AGI
 
-    def increase_DEF(self, increase_in_DEF):
+    def increase_SHIELD(self, increase_in_SHIELD):
         """
         Increase the defense value of the character.
 
         :param increase_in_DEF: Amount to increase defense.
         """
-        self.DEF += increase_in_DEF
+        self.SHIELD += increase_in_SHIELD
 
     def decrease_max_HP(self, decrease_in_Max_HP):
         """
@@ -144,16 +149,16 @@ class Character:
         if self.AGI < 1:
             self.AGI = 1
 
-    def decrease_DEF(self, decrease_in_DEF):
+    def decrease_SHIELD(self, decrease_in_SHIELD):
         """
         Decrease the defense value of the character.
 
         :param decrease_in_DEF: Amount to decrease defense.
         """
-        self.DEF -= decrease_in_DEF
+        self.SHIELD -= decrease_in_SHIELD
 
-        if self.DEF < 0:
-            self.DEF = 0
+        if self.SHIELD < 0:
+            self.SHIELD = 0
 
 # Represents the battle environment, and keeps track of its state
 class Battle_Grid:
@@ -206,7 +211,7 @@ class Battle_Grid:
         available_moves = []
 
         # Calculate true agility considering the tile effect
-        true_agility = self.selected_character.AGI + tile_agility[self.grid_tile_info[character_tile_position[0]][character_tile_position[1]][0]]
+        true_agility = self.selected_character.AGI + TILE_AGILITY_EFFECTS[self.grid_tile_info[character_tile_position[0]][character_tile_position[1]][0]]
 
         # Makes sure true agility is always at least 1 (or else characters could get stuck on a tile if agility too low)
         if true_agility < 1:
