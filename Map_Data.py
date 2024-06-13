@@ -1,9 +1,9 @@
 # Dictionary containing the effects on agility of each tile
 tile_agility = { 
-    "G": 0,   # Grass
-    "D": 0,   # Dirt
-    "W": -2,  # Water
-    "M": -5   # Mountain
+    "g": 0,   # Grass
+    "d": 0,   # Dirt
+    "w": -2,  # Water
+    "m": -5   # Mountain
 }
 
 # AI bot responsible for making moves of NPC pieces
@@ -34,7 +34,7 @@ class Character:
         """
         self.titles = titles
         self.name = name
-        self.character_id = character_id
+        self.id = character_id
         self.LVL = LVL
         self.current_HP = current_HP
         self.max_HP = max_HP
@@ -168,8 +168,8 @@ class Battle_Grid:
         """
         self.dimensions = [len(grid_tile_info),len(grid_tile_info[0])]
 
-        # example grid_tile_info element = "g01*P01" 
-        # G01 = Grass tile, character with id = P01 present on the tile
+        # example grid_tile_info element = "g01*P01#01" 
+        # G01 = Grass tile, character image id = P01 present on the tile, character id = #01
         self.grid_tile_info = grid_tile_info
         self.player_characters = player_characters
         self.opponent_characters = opponent_characters
@@ -234,6 +234,25 @@ class Battle_Grid:
 
         return available_moves.copy()
 
+    # Returns the character at the tile based on the character ID
+    def get_character_at_tile(self, tile_position):
+        
+        tile_info = self.grid_tile_info[tile_position[0]][tile_position[1]]
+        
+
+        if tile_info[4] == "P":
+            for character in self.player_characters:
+            
+                if character.id == tile_info[7:10]:
+                    return character
+        elif tile_info[4] == "E":
+            for character in self.opponent_characters:
+                if character.id == tile_info[7:10]:
+                    return character
+        else:
+            return None
+
+
     # Attempts to select tile
     def select_tile_attempt(self, tile_position):
         """
@@ -241,11 +260,26 @@ class Battle_Grid:
 
         :param tile_position: Position of the tile to select.
         """
-        if self.grid_tile_info[tile_position[0]][tile_position[1]][4] == "P" and self.player_characters[int(self.grid_tile_info[tile_position[0]][tile_position[1]][5:7]) - 1].has_turn:
-            self.tile_selected_position = tile_position
-            self.tile_selected = True
-            self.selected_character = self.player_characters[int(self.grid_tile_info[tile_position[0]][tile_position[1]][5:7]) - 1]
-            self.available_move_tiles = self.get_characters_available_moves(self.tile_selected_position)
+        
+        character_at_tile = self.get_character_at_tile(tile_position)
+        try:
+            if self.grid_tile_info[tile_position[0]][tile_position[1]][4] == "P" and character_at_tile.has_turn:
+                self.tile_selected_position = tile_position
+                self.tile_selected = True
+
+                self.selected_character = character_at_tile
+
+                if self.selected_character == None:
+                    print("ERROR: Character id at tile, not found in player_character list")
+                    return
+
+                self.available_move_tiles = self.get_characters_available_moves(self.tile_selected_position)
+        
+        except AttributeError:
+            print(f"ERROR: No Character Present at the tile position [Row: {tile_position[0]}, Column: {tile_position[1]}]")
+            print(f"Info present at selected tile: {self.grid_tile_info[tile_position[0]][tile_position[1]]}")
+            pass
+
         return
 
     # Updates character position
@@ -255,12 +289,18 @@ class Battle_Grid:
 
         :param new_tile_position: New position to move the character to.
         """
-        # Copies character id to new grid tile
-        character_id = self.grid_tile_info[self.selected_tile_position[0]][self.selected_tile_position[1]][4:7]
-        self.grid_tile_info[new_tile_position[0]][new_tile_position[1]][4:7] = character_id
+        # Get the character info from the current tile
+        character_info = self.grid_tile_info[self.selected_tile_position[0]][self.selected_tile_position[1]][4:10]
+        
+        # Move the character to the new tile
+        current_tile_value = self.grid_tile_info[new_tile_position[0]][new_tile_position[1]]
+        new_tile_value = current_tile_value[:4] + character_info
+        self.grid_tile_info[new_tile_position[0]][new_tile_position[1]] = new_tile_value
 
-        # Removes character id from the prior tile
-        self.grid_tile_info[self.selected_tile_position[0]][self.selected_tile_position[1]][4:7] = "___"
+        # Remove the character from the previous tile
+        old_tile_value = self.grid_tile_info[self.selected_tile_position[0]][self.selected_tile_position[1]]
+        cleaned_old_tile_value = old_tile_value[:4] + "___#__"
+        self.grid_tile_info[self.selected_tile_position[0]][self.selected_tile_position[1]] = cleaned_old_tile_value
 
         return
 

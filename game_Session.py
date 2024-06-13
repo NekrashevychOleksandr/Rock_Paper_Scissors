@@ -26,7 +26,7 @@ class Game:
         self.running = True
         
 
-        # Default board grid data will be pulled from a file later
+        # Default board grid data. Will be pulled from a file later
         loaded_grid_tile_info = [
                           ["g01*___#__","g01*P01#01","g01*___#__","g01*___#__","d01*___#__","d01*___#__","g01*___#__","g01*P01#02"],
                           ["g01*___#__","g01*___#__","g01*___#__","g01*___#__","d01*P01#03","d01*___#__","g01*___#__","g01*___#__"],
@@ -43,11 +43,14 @@ class Game:
         player_characters = []
         enemy_characters = []
 
-        for tile in loaded_grid_tile_info:
-            if tile[4] == "E": 
-                enemy_characters.append(map_Data.Character([], "Test Name", tile[7:10], 1, 5, 5, 1, 0, 1, [], []))
-            elif tile[4] == "P":
-                player_characters.append(map_Data.Character([], "Test Name", tile[7:10], 1, 5, 5, 1, 0, 1, [], []))
+        for tile_row in loaded_grid_tile_info:
+            for tile in tile_row:
+                if tile[4] == "E": 
+                    enemy_characters.append(map_Data.Character([], "Test Name", tile[7:10], 1, 5, 5, 1, 0, 1, [], []))
+                elif tile[4] == "P":
+                    player_characters.append(map_Data.Character([], "Test Name", tile[7:10], 1, 5, 5, 1, 0, 1, [], []))
+
+        
 
         self.battle_grid = map_Data.Battle_Grid(loaded_grid_tile_info, player_characters, enemy_characters)
         self.board_dimensions = [len(loaded_grid_tile_info),len(loaded_grid_tile_info[0])]
@@ -94,9 +97,17 @@ class Game:
                     break
 
         if tile_coords[0] == None or tile_coords[1] == None:
-            pass
+            print(f"ERROR: No tile present at these coordinates")
         else: 
-            print(f"Left click at tile [Row: {tile_coords[0]}, Column: {tile_coords[1]}]")
+
+            if not self.battle_grid.tile_selected:
+                self.battle_grid.select_tile_attempt(tile_coords)
+                print(f"Left click: tile selected [Row: {tile_coords[0]}, Column: {tile_coords[1]}]")
+            else:
+                self.battle_grid.selected_tile_move_attempt(tile_coords)
+                print(f"Left click: tile selected and move made to [Row: {tile_coords[0]}, Column: {tile_coords[1]}]")
+
+            
 
     def handle_right_click(self, x, y):
         """
