@@ -296,6 +296,8 @@ class Battle_Grid:
         current_tile_value = self.grid_tile_info[new_tile_position[0]][new_tile_position[1]]
         new_tile_value = current_tile_value[:4] + character_info
         self.grid_tile_info[new_tile_position[0]][new_tile_position[1]] = new_tile_value
+        
+
 
         # Remove the character from the previous tile
         old_tile_value = self.grid_tile_info[self.selected_tile_position[0]][self.selected_tile_position[1]]
@@ -313,21 +315,27 @@ class Battle_Grid:
         """
         if new_tile_position in self.available_move_tiles:
             if self.grid_tile_info[new_tile_position[0]][new_tile_position[1]][4:7] == "___":
+
                 self.update_character_position(new_tile_position)
                 self.selected_character.has_turn = False
+                self.tile_selected = False
                 return
             elif self.grid_tile_info[new_tile_position[0]][new_tile_position[1]][4] == "E":
                 enemy_character = self.opponent_characters[int(self.grid_tile_info[new_tile_position[0]][new_tile_position[1]][5:7]) - 1]
                 enemy_character.take_damage(self.selected_character.ATK)
                 self.selected_character.has_turn = False
+                self.tile_selected = False
                 return
             else:
+                print("ERROR: invalid destination")
                 self.tile_selected = False
                 self.selected_tile_position = [-1, -1]
                 self.available_move_tiles = None
                 self.selected_character = None
                 return
         else:
+
+            print("ERROR: new_tile_position not in self.available_move_tiles")
             self.tile_selected = False
             self.selected_tile_position = [-1, -1]
             self.available_move_tiles = None
