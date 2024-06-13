@@ -44,6 +44,7 @@ class Character:
         self.equipment = equipment
         self.is_Dead = False
         self.has_turn = True
+        self.no_corpse = False
        
 
     def LVL_up(self):
@@ -52,6 +53,8 @@ class Character:
         """
         self.LVL += 1
         
+    def become_corpse(self):
+        pass
 
     def take_damage(self, incoming_damage):
         """
