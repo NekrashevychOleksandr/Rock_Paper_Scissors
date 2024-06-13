@@ -22,7 +22,7 @@ class button:
         # Draw the button border
         pygame.draw.rect(self.screen, self.colour, (self.coordinates[0], self.coordinates[1], self.width, self.height), self.thickness)
         
-        # Blit the image if available
+        # Blit the image if available,,
         if self.image:
             self.screen.blit(self.image, (self.coordinates[0], self.coordinates[1]))
 
