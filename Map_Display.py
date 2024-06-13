@@ -17,7 +17,7 @@ character_images = {
 
 
 class Tile:
-    def __init__(self, id, x, y, tile_type,tile_size):
+    def __init__(self, x, y, tile_type,tile_size):
         """
         Initialize a tile.
 
@@ -26,7 +26,6 @@ class Tile:
         :param y: Y coordinate of the tile in the grid.
         :param tile_type: Type of the tile, which determines its image.
         """
-        self.id = id
         self.x = int(x)
         self.y = int(y)
         self.tile_type = tile_type
@@ -62,43 +61,34 @@ class Tile:
         print(s)
 
 class Tiles:
-    def __init__(self, screen, board_dimensions, tile_size, window_width, window_height):
+    def __init__(self, screen, loaded_grid_tile_info, tile_size, window_width, window_height):
         """
         Initialize the Tiles manager.
 
         :param screen: Pygame surface to draw tiles on.
         """
-        self.tiles_horizontal = board_dimensions[0]
-        self.tiles_vertical = board_dimensions[1]
+        self.tiles_horizontal = len(loaded_grid_tile_info[0])
+        self.tiles_vertical = len(loaded_grid_tile_info)
         self.tile_size = tile_size
         self.window_width = window_width
         self.window_height = window_height
         self.screen = screen
         self.inner = []
-        self.load_data()
+        self.load_data(loaded_grid_tile_info)
         self.calculate_offset()
         
         
-    def load_data(self):
+    def load_data(self, grid_tile_info):
         """
         Load the tile data from a file and initialize Tile objects.
         """
         self.inner = []
-        filepath = os.path.join("Maps", "test_Map_0.txt")
-        with open(filepath, "r") as f:
-            mylines = f.readlines()
-            mylines = [i.strip() for i in mylines if len(i.strip()) > 0]
+        
+        for y in range(self.tiles_vertical):
+            for x in range(self.tiles_horizontal):
+                self.inner.append(Tile(x, y, grid_tile_info[y][x][:3], self.tile_size))
 
-        id = 0
-        for count_i, myline in enumerate(mylines):
-            temp_list = myline.split(";")
-            temp_list = [i.strip() for i in temp_list if len(i.strip()) > 0]
-
-            for count_j, elem in enumerate(temp_list):
-                tile_type = elem.split("*")[0]
-                new_tile = Tile(id, count_j, count_i, tile_type, self.tile_size)
-                self.inner.append(new_tile)
-                id += 1
+              
 
     def calculate_offset(self):
         """
@@ -131,7 +121,7 @@ class Tiles:
             elem.debug_print()
 
 class Character_Display:
-    def __init__(self, id, x, y, character_kind, tile_size):
+    def __init__(self, x, y, character_kind, tile_size):
         """
         Initialize a character.
 
@@ -140,7 +130,6 @@ class Character_Display:
         :param y: Y coordinate of the character in the grid.
         :param character_kind: Type of the character, which determines its image.
         """
-        self.id = id
         self.x, self.y = int(x), int(y)
         self.myinc = 0.5
         self.tile_size = tile_size
@@ -176,7 +165,7 @@ class Character_Display:
         print(s)
 
 class Characters_Display:
-    def __init__(self, surface, board_dimensions, tile_size, window_width, window_height):
+    def __init__(self, surface, loaded_grid_tile_info, tile_size, window_width, window_height):
         """
         Initialize the Characters_Display manager.
 
@@ -185,31 +174,24 @@ class Characters_Display:
         self.surface = surface
         self.inner = []
         self.tile_size = tile_size
-        self.tiles_horizontal = board_dimensions[0]
-        self.tiles_vertical = board_dimensions[1]
+        self.tiles_horizontal = len(loaded_grid_tile_info[0])
+        self.tiles_vertical = len(loaded_grid_tile_info)
         self.window_width = window_width
         self.window_height = window_height
-        self.load_data()
+        self.load_data(loaded_grid_tile_info)
         self.calculate_offset()
 
-    def load_data(self):
+    def load_data(self,grid_tile_info):
         """
         Load the character data from a file and initialize Character_Display objects.
         """
-        filepath = os.path.join("Maps", "test_Map_0.txt")
-        with open(filepath, "r") as f:
-            mylines = f.readlines()
-            mylines = [i.strip() for i in mylines if len(i.strip()) > 0]
+        self.inner = []
+        
+        for y in range(self.tiles_vertical):
+            for x in range(self.tiles_horizontal):
+                if grid_tile_info[y][x][4] == "E" or grid_tile_info[y][x][4] == "P":
+                    self.inner.append(Character_Display(x, y, grid_tile_info[y][x][4:], self.tile_size))
 
-        id = 0
-        for count_i, line in enumerate(mylines):
-            temp_list = line.split(";")
-            for count_j, elem in enumerate(temp_list):
-                if len(elem.split("*")) > 1 and elem.split("*")[1] in ["P01", "E01"]:
-                    character_kind = elem.split("*")[1]
-                    new_character = Character_Display(id, count_j, count_i, character_kind, self.tile_size)
-                    self.inner.append(new_character)
-                    id += 1
 
     def calculate_offset(self):
         """

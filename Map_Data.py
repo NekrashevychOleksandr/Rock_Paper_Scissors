@@ -157,7 +157,7 @@ class Character:
 
 # Represents the battle environment, and keeps track of its state
 class Battle_Grid:
-    def __init__(self, dimensions, grid_tile_info, player_characters, opponent_characters):
+    def __init__(self, grid_tile_info, player_characters, opponent_characters):
         """
         Initialize the battle grid.
 
@@ -166,9 +166,9 @@ class Battle_Grid:
         :param player_characters: List of player characters.
         :param opponent_characters: List of opponent characters.
         """
-        self.dimensions = dimensions
+        self.dimensions = [len(grid_tile_info),len(grid_tile_info[0])]
 
-        # example grid_tile_info element = "G01*P01" 
+        # example grid_tile_info element = "g01*P01" 
         # G01 = Grass tile, character with id = P01 present on the tile
         self.grid_tile_info = grid_tile_info
         self.player_characters = player_characters
