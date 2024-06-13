@@ -27,18 +27,7 @@ class Game:
         self.running = True
         
 
-        # Default board grid data. Will be pulled from a file later
-        loaded_grid_tile_info = [
-                          ["g01*___#__","g01*P01#01","g01*___#__","g01*___#__","d01*___#__","d01*___#__","g01*___#__","g01*P01#02"],
-                          ["g01*___#__","g01*___#__","g01*___#__","g01*___#__","d01*P01#03","d01*___#__","g01*___#__","g01*___#__"],
-                          ["g01*___#__","d01*___#__","g01*P01#04","g01*___#__","d01*___#__","d01*___#__","g01*___#__","d01*___#__"],
-                          ["g01*___#__","g01*___#__","g01*___#__","g01*___#__","d01*___#__","d01*___#__","g01*___#__","g01*___#__"],
-                          ["g01*___#__","g01*___#__","g01*___#__","g01*___#__","d01*___#__","d01*___#__","g01*E01#01","g01*___#__"],
-                          ["g01*___#__","d01*___#__","g01*E01#02","g01*___#__","d01*___#__","d01*___#__","g01*___#__","g01*___#__"],
-                          ["g01*___#__","g01*___#__","g01*___#__","g01*___#__","d01*___#__","d01*___#__","g01*___#__","g01*___#__"],
-                          ["g01*E01#03","g01*___#__","g01*___#__","g01*___#__","d01*___#__","d01*___#__","g01*___#__","g01*___#__"]]
-
-
+        loaded_grid_tile_info = self.load_map()
         
 
         player_characters = []
@@ -68,7 +57,7 @@ class Game:
         """
         Load map data from a text file and populate self.map_data.
         """
-        self.map_data = []
+        map_data = []
         filepath = os.path.join("Maps", "test_Map_0.txt")  # Adjust path as per your file structure
 
         try:
@@ -78,15 +67,17 @@ class Game:
                     if line:
                         # Split line into parts separated by ";", strip each part of whitespace
                         temp_list = [part.strip() for part in line.split(";") if part.strip()]
-                        self.map_data.append(temp_list)
+                        map_data.append(temp_list)
         except FileNotFoundError:
             print(f"Error: Map file not found at {filepath}")
             # Optionally, handle the error (e.g., load default map or exit game)
 
         # Print loaded map data for debugging
         print("Loaded map data:")
-        for row in self.map_data:
+        for row in map_data:
             print(row)
+
+        return map_data
 
     def events(self):
         """
