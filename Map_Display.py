@@ -1,4 +1,5 @@
 import pygame
+import numpy as np
 import os
 
 maps_list = {"test_Map_0":"test_Map_0.txt"}
@@ -30,6 +31,7 @@ class Tile:
         self.y = int(y)
         self.tile_type = tile_type
         self.tile_size = tile_size
+        
 
         
 
@@ -53,6 +55,13 @@ class Tile:
         self.rect.x += offset_x
         self.rect.y += offset_y
 
+    def get_tile_coordinate_range(self):
+        """
+        Returns the upper and lower bounds of the tile in terms of pixel coordinates
+        """
+        return [self.rect.topleft,self.rect.bottomright] 
+
+    
     def debug_print(self):
         """
         Print the tile's details for debugging purposes.
@@ -112,6 +121,24 @@ class Tiles:
             raise ValueError("No Tiles to load in")
         for elem in self.inner:
             surface.blit(elem.image, elem.rect)
+
+    def get_tile_coordinate_ranges(self):
+        """
+        Get the coordinate ranges of all the tiles.
+        """
+
+        # Create an empty 2D array with the given number of tile rows and tile columns
+        array_coordinates = [[None for _ in range(self.tiles_horizontal)] for _ in range(self.tiles_vertical)]
+
+        for tile in self.inner:
+            array_coordinates[tile.y][tile.x] = tile.get_tile_coordinate_range()
+        
+        
+
+        return array_coordinates
+
+    
+
 
     def debug_print(self):
         """
@@ -190,7 +217,7 @@ class Characters_Display:
         for y in range(self.tiles_vertical):
             for x in range(self.tiles_horizontal):
                 if grid_tile_info[y][x][4] == "E" or grid_tile_info[y][x][4] == "P":
-                    self.inner.append(Character_Display(x, y, grid_tile_info[y][x][4:], self.tile_size))
+                    self.inner.append(Character_Display(x, y, grid_tile_info[y][x][4:7], self.tile_size))
 
 
     def calculate_offset(self):

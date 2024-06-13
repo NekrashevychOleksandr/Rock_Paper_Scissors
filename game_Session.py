@@ -24,46 +24,41 @@ class Game:
         self.surface = pygame.display.set_mode((self.window_width, self.window_height))
         self.BG_COLOR = ("black")
         self.running = True
+        
 
-        # Default board dimensions will be pulled from a file later
-        self.board_dimensions = [8,8]
+        # Default board grid data will be pulled from a file later
+        loaded_grid_tile_info = [
+                          ["g01*___#__","g01*P01#01","g01*___#__","g01*___#__","d01*___#__","d01*___#__","g01*___#__","g01*P01#02"],
+                          ["g01*___#__","g01*___#__","g01*___#__","g01*___#__","d01*P01#03","d01*___#__","g01*___#__","g01*___#__"],
+                          ["g01*___#__","d01*___#__","g01*P01#04","g01*___#__","d01*___#__","d01*___#__","g01*___#__","d01*___#__"],
+                          ["g01*___#__","g01*___#__","g01*___#__","g01*___#__","d01*___#__","d01*___#__","g01*___#__","g01*___#__"],
+                          ["g01*___#__","g01*___#__","g01*___#__","g01*___#__","d01*___#__","d01*___#__","g01*E01#01","g01*___#__"],
+                          ["g01*___#__","d01*___#__","g01*E01#02","g01*___#__","d01*___#__","d01*___#__","g01*___#__","g01*___#__"],
+                          ["g01*___#__","g01*___#__","g01*___#__","g01*___#__","d01*___#__","d01*___#__","g01*___#__","g01*___#__"],
+                          ["g01*E01#03","g01*___#__","g01*___#__","g01*___#__","d01*___#__","d01*___#__","g01*___#__","g01*___#__"]]
 
 
-
-        loaded_grid_tile_info = [["g01*___","g01*P01","g01*___","g01*___","d01*___","d01*___","g01*___","g01*P01"],
-                          ["g01*___","g01*___","g01*___","g01*___","d01*P01","d01*___","g01*___","g01*___"],
-                          ["g01*___","d01*___","g01*P01","g01*___","d01*___","d01*___","g01*___","d01*___"],
-                          ["g01*___","g01*___","g01*___","g01*___","d01*___","d01*___","g01*___","g01*___"],
-                          ["g01*___","g01*___","g01*___","g01*___","d01*___","d01*___","g01*E01","g01*___"],
-                          ["g01*___","d01*___","g01*E01","g01*___","d01*___","d01*___","g01*___","g01*___"],
-                          ["g01*___","g01*___","g01*___","g01*___","d01*___","d01*___","g01*___","g01*___"],
-                          ["g01*E01","g01*___","g01*___","g01*___","d01*___","d01*___","g01*___","g01*___"]]
-                          
-        enemy_count = 0
-        player_count = 0
-        for tile in loaded_grid_tile_info:
-            if tile[4] == "E":
-                enemy_count += 1
-            elif tile[4] == "P":
-                player_count += 1
+        
 
         player_characters = []
         enemy_characters = []
 
-        for i in range(1,enemy_count):
-            enemy_characters.append(map_Data.Character([], "Test Name", i, 1, 5, 5, 1, 0, 1, [], []))
-
-        for i in range(1,player_count):
-            player_characters.append(map_Data.Character([], "Test Name", i, 1, 5, 5, 1, 0, 1, [], []))
+        for tile in loaded_grid_tile_info:
+            if tile[4] == "E": 
+                enemy_characters.append(map_Data.Character([], "Test Name", tile[7:10], 1, 5, 5, 1, 0, 1, [], []))
+            elif tile[4] == "P":
+                player_characters.append(map_Data.Character([], "Test Name", tile[7:10], 1, 5, 5, 1, 0, 1, [], []))
 
         self.battle_grid = map_Data.Battle_Grid(loaded_grid_tile_info, player_characters, enemy_characters)
+        self.board_dimensions = [len(loaded_grid_tile_info),len(loaded_grid_tile_info[0])]
 
         # Calculate the dynamic tile size
         # minimum of the height and breadth because the tiles will always be square and could thus not fit into the screen
-        self.tile_size = min(self.window_width // self.board_dimensions[0], self.window_height // self.board_dimensions[1])
+        self.tile_size = min(self.window_width // self.battle_grid.dimensions[0], self.window_height // self.battle_grid.dimensions[1])
 
         self.tiles = map_Display.Tiles(self.surface, self.battle_grid.grid_tile_info, self.tile_size, self.window_width, self.window_height)
         self.characters = map_Display.Characters_Display(self.surface, self.battle_grid.grid_tile_info, self.tile_size, self.window_width, self.window_height)
+        self.tile_coordinates = self.tiles.get_tile_coordinate_ranges()
 
     def events(self):
         """
@@ -75,21 +70,55 @@ class Game:
             elif event.type == pygame.KEYDOWN:
                 if event.key == pygame.K_ESCAPE:
                     self.running = False
+            elif event.type == pygame.MOUSEBUTTONDOWN:
+                    if event.button == 1:  # Left mouse button
+                        x, y = event.pos
+                        self.handle_left_click(x, y)
+                    elif event.button == 3:  # Right mouse button
+                        x, y = event.pos
+                        self.handle_right_click(x, y)
+
+    def handle_left_click(self, x, y):
+        """
+        Handle left mouse button click.
+        
+        :param x: X coordinate of the mouse click.
+        :param y: Y coordinate of the mouse click.
+        """
+        tile_coords = [None,None]
+    
+        for i in range(self.battle_grid.dimensions[0]):
+            for j in range(self.battle_grid.dimensions[1]):
+                if x >= self.tile_coordinates[i][j][0][0] and x <= self.tile_coordinates[i][j][1][0] and y >= self.tile_coordinates[i][j][0][1] and y <= self.tile_coordinates[i][j][1][1]:
+                    tile_coords = [i,j]
+                    break
+
+        if tile_coords[0] == None or tile_coords[1] == None:
+            pass
+        else: 
+            print(f"Left click at tile [Row: {tile_coords[0]}, Column: {tile_coords[1]}]")
+
+    def handle_right_click(self, x, y):
+        """
+        Handle right mouse button click.
+        
+        :param x: X coordinate of the mouse click.
+        :param y: Y coordinate of the mouse click.
+        """
+        
+        print(f"Right click at pixel coordinates ({x}, {y})")
 
     def update(self):
         """
-        Update the game state. Currently does nothing, but can be extended.
+        Update the game state.
         """
         self.tiles.load_data(self.battle_grid.grid_tile_info)
+        self.tiles.calculate_offset()
         self.characters.load_data(self.battle_grid.grid_tile_info)
-        
+        self.characters.calculate_offset()
+        self.tile_coordinates = self.tiles.get_tile_coordinate_ranges()
+        return
 
-    def get_map_data(self):
-        
-        
-
-
-        pass
 
     def draw(self):
         """
