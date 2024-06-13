@@ -56,14 +56,14 @@ class Game:
         for i in range(1,player_count):
             player_characters.append(map_Data.Character([], "Test Name", i, 1, 5, 5, 1, 0, 1, [], []))
 
-        battle_grid = map_Data.Battle_Grid(loaded_grid_tile_info, player_characters, enemy_characters)
+        self.battle_grid = map_Data.Battle_Grid(loaded_grid_tile_info, player_characters, enemy_characters)
 
         # Calculate the dynamic tile size
         # minimum of the height and breadth because the tiles will always be square and could thus not fit into the screen
         self.tile_size = min(self.window_width // self.board_dimensions[0], self.window_height // self.board_dimensions[1])
 
-        self.tiles = map_Display.Tiles(self.surface, battle_grid.grid_tile_info, self.tile_size, self.window_width, self.window_height)
-        self.characters = map_Display.Characters_Display(self.surface, battle_grid.grid_tile_info, self.tile_size, self.window_width, self.window_height)
+        self.tiles = map_Display.Tiles(self.surface, self.battle_grid.grid_tile_info, self.tile_size, self.window_width, self.window_height)
+        self.characters = map_Display.Characters_Display(self.surface, self.battle_grid.grid_tile_info, self.tile_size, self.window_width, self.window_height)
 
     def events(self):
         """
@@ -80,7 +80,9 @@ class Game:
         """
         Update the game state. Currently does nothing, but can be extended.
         """
-        pass
+        self.tiles.load_data(self.battle_grid.grid_tile_info)
+        self.characters.load_data(self.battle_grid.grid_tile_info)
+        
 
     def get_map_data(self):
         
