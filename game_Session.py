@@ -119,12 +119,19 @@ class Game:
 
             if not self.battle_grid.tile_selected:
                 self.battle_grid.select_tile_attempt(tile_coords)
-                print(f"Left click: tile selected [Row: {tile_coords[0]}, Column: {tile_coords[1]}]\n")
-                #print(self.battle_grid.grid_tile_info)
+                if self.battle_grid.tile_selected:
+                    print(f"Left click: Valid tile selected [Row: {tile_coords[0]}, Column: {tile_coords[1]}]\n")
+                else:
+                    print(f"Left click: invalid tile selected [Row: {tile_coords[0]}, Column: {tile_coords[1]}]\n")
+                print("\n")
+                print(self.battle_grid.selected_tile_position)
+                print("\n")
+                print(self.battle_grid.grid_tile_info)
             else:
                 self.battle_grid.selected_tile_move_attempt(tile_coords)
                 print(f"Left click: tile selected and move made to [Row: {tile_coords[0]}, Column: {tile_coords[1]}]\n")
-                #print(self.battle_grid.grid_tile_info)
+                
+                print(self.battle_grid.grid_tile_info)
             
 
     def handle_right_click(self, x, y):

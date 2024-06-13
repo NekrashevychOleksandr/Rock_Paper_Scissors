@@ -39,6 +39,19 @@ def test_map_Data_update_character_position():
         print("\nmap_Data_update_character_position TEST 1: SUCCESS")
     else:
         print("\nmap_Data_update_character_position TEST 1: FAILED")
+
+    battle_grid.selected_tile = True
+    battle_grid.selected_tile_position = [0,7]
+    battle_grid.update_character_position([6,0])
+
+    if battle_grid.grid_tile_info[6][0] == "g01*P01#02":
+        print("\nmap_Data_update_character_position TEST 2: SUCCESS")
+    else:
+        print("\nmap_Data_update_character_position TEST 2: FAILED")
+
     return
 
+
 test_map_Data_update_character_position()
+
+

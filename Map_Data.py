@@ -264,7 +264,8 @@ class Battle_Grid:
         character_at_tile = self.get_character_at_tile(tile_position)
         try:
             if self.grid_tile_info[tile_position[0]][tile_position[1]][4] == "P" and character_at_tile.has_turn:
-                self.tile_selected_position = tile_position
+               
+                self.selected_tile_position = tile_position
                 self.tile_selected = True
 
                 self.selected_character = character_at_tile
@@ -273,13 +274,14 @@ class Battle_Grid:
                     print("ERROR: Character id at tile, not found in player_character list")
                     return
 
-                self.available_move_tiles = self.get_characters_available_moves(self.tile_selected_position)
+                self.available_move_tiles = self.get_characters_available_moves(self.selected_tile_position)
         
         except AttributeError:
             print(f"ERROR: No Character Present at the tile position [Row: {tile_position[0]}, Column: {tile_position[1]}]")
             print(f"Info present at selected tile: {self.grid_tile_info[tile_position[0]][tile_position[1]]}")
             pass
-
+        
+        print(self.selected_tile_position)
         return
 
     # Updates character position
