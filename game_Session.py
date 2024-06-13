@@ -171,8 +171,8 @@ class Game:
         """
         while self.running:
             self.events()
-            self.load_map()
             self.update()
+            self.draw()
             
 
 if __name__ == "__main__":
