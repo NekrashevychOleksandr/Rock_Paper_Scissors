@@ -2,6 +2,7 @@ import pygame
 import os
 
 maps_list = {"test_Map_0":"test_Map_0.txt"}
+
 # Dictionary to map tile types to image file paths
 tile_images = {
             "g01": "Media/Tiles/Grass_Tile.jpg",
