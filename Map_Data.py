@@ -1,7 +1,7 @@
 import GAME_DATA_BANK
 
 # Dictionary containing the effects on agility of each tile
-TILE_AGILITY_EFFECTS = GAME_DATA_BANK.TILE_AGILITY_EFFECTS.DATA
+TILE_AGILITY_EFFECTS = GAME_DATA_BANK.TILE_AGILITY_EFFECTS().DATA
 
 
 
@@ -15,7 +15,7 @@ class AI_bot:
 
 # Represents characters on the grid
 class Character:
-    def __init__(self, titles, name, character_id, LVL, current_HP, max_HP, ATK, SHIELD, AGI, statuses, equipment, character_position):
+    def __init__(self, titles, name, character_id, LVL, current_HP, max_HP, ATK, SHIELD, AGI, statuses, equipment):
         """
         Initialize a character.
 
@@ -44,7 +44,7 @@ class Character:
         self.equipment = equipment
         self.is_Dead = False
         self.has_turn = True
-        self.character_position = character_position
+       
 
     def LVL_up(self):
         """
