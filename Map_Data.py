@@ -2,6 +2,8 @@ import GAME_DATA_BANK
 
 # Dictionary containing the effects on agility of each tile
 TILE_AGILITY_EFFECTS = GAME_DATA_BANK.TILE_AGILITY_EFFECTS().DATA
+EQUIPMENT_EFFECTS = GAME_DATA_BANK.CHARACTER_EQUIPMENT().DATA
+STATUS_EFFECTS = GAME_DATA_BANK.CHARACTER_STATUSES().DATA
 
 
 
@@ -41,19 +43,24 @@ class Character:
         self.ATK = base_ATK
         self.SHIELD = SHIELD
         self.AGI = base_AGI
-        if statuses == "_":
-            self.statuses = []
+        self.statuses = []
+        if statuses[0] == "_":
+            pass
         else:
-            self.statuses = statuses
-
-        if equipment == "_": 
-            self.equipment = []
+            for status_id in statuses:
+                self.statuses.append(STATUS_EFFECTS[status_id])
+        
+        self.equipment = []
+        if equipment[0] == "_": 
+            pass
         else:   
-            self.equipment = equipment
+            for equipment_id in equipment:
+                self.equipment.append(EQUIPMENT_EFFECTS[equipment_id])
         self.is_Dead = False
         self.has_turn = True
         self.no_corpse = False
-        self.apply_equipment_effects(equipment)
+
+        self.apply_equipment_effects(self.equipment)
 
 
        

@@ -13,6 +13,7 @@ class Game:
         """
         Initialize the game, setting up the window, clock, and game elements.
         """
+        
         pygame.init()
         self.clock = pygame.time.Clock()
         pygame.display.set_caption("Placeholder Game Name")
@@ -79,7 +80,7 @@ class Game:
                     if line:
                         # Split line into parts separated by ";", strip each part of whitespace
                         temp_list = [part.strip() for part in line.split(";") if part.strip()]
-                        player_characters[temp_list[3]] = map_Data.Character(temp_list[0].split(","),temp_list[1],temp_list[2],temp_list[3],temp_list[4],temp_list[5],temp_list[6],temp_list[7],temp_list[8],temp_list[9],temp_list[10].split(","),temp_list[11].split(","))
+                        player_characters[temp_list[3]] = map_Data.Character(temp_list[0].split(","),temp_list[1],temp_list[2],temp_list[3],int(temp_list[4]),int(temp_list[5]),int(temp_list[6]),int(temp_list[7]),int(temp_list[8]),int(temp_list[9]),temp_list[10].split(","),temp_list[11].split(","))
         except FileNotFoundError:
             print(f"Error: Map file not found at {filepath}")
             # Optionally, handle the error (e.g., load default map or exit game)
@@ -95,7 +96,7 @@ class Game:
                     if line:
                         # Split line into parts separated by ";", strip each part of whitespace
                         temp_list = [part.strip() for part in line.split(";") if part.strip()]
-                        enemy_characters[temp_list[3]] = map_Data.Character(temp_list[0].split(","),temp_list[1],temp_list[2],temp_list[3],temp_list[4],temp_list[5],temp_list[6],temp_list[7],temp_list[8],temp_list[9],temp_list[10].split(","),temp_list[11].split(","))
+                        enemy_characters[temp_list[3]] = map_Data.Character(temp_list[0].split(","),temp_list[1],temp_list[2],temp_list[3],int(temp_list[4]),int(temp_list[5]),int(temp_list[6]),int(temp_list[7]),int(temp_list[8]),int(temp_list[9]),temp_list[10].split(","),temp_list[11].split(","))
         except FileNotFoundError:
             print(f"Error: Map file not found at {filepath}")
             # Optionally, handle the error (e.g., load default map or exit game)
