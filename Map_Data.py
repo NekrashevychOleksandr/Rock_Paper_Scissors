@@ -15,7 +15,7 @@ class AI_bot:
 
 # Represents characters on the grid
 class Character:
-    def __init__(self, titles, name, character_id, LVL, current_HP, max_HP, ATK, SHIELD, AGI, statuses, equipment):
+    def __init__(self, titles, name, character_id, LVL, current_HP, base_Max_HP, base_ATK, SHIELD, base_AGI, statuses, equipment):
         """
         Initialize a character.
 
@@ -36,10 +36,10 @@ class Character:
         self.id = character_id
         self.LVL = LVL
         self.current_HP = current_HP
-        self.max_HP = max_HP
-        self.ATK = ATK
+        self.max_HP = base_Max_HP
+        self.ATK = base_ATK
         self.SHIELD = SHIELD
-        self.AGI = AGI
+        self.AGI = base_AGI
         self.statuses = statuses
         self.equipment = equipment
         self.is_Dead = False
@@ -53,9 +53,6 @@ class Character:
         """
         self.LVL += 1
         
-    def become_corpse(self):
-        pass
-
     def take_damage(self, incoming_damage):
         """
         Apply damage to the character, reducing HP.
@@ -249,14 +246,10 @@ class Battle_Grid:
         
 
         if tile_info[4] == "P":
-            for character in self.player_characters:
-            
-                if character.id == tile_info[7:10]:
-                    return character
+            return self.player_characters[tile_info[7:10]]
+        
         elif tile_info[4] == "E":
-            for character in self.opponent_characters:
-                if character.id == tile_info[7:10]:
-                    return character
+            return self.opponent_characters[tile_info[7:10]]
         else:
             return None
 
@@ -331,11 +324,26 @@ class Battle_Grid:
                 self.tile_selected = False
                 return
             elif self.grid_tile_info[new_tile_position[0]][new_tile_position[1]][4] == "E":
-                enemy_character = self.opponent_characters[int(self.grid_tile_info[new_tile_position[0]][new_tile_position[1]][5:7]) - 1]
+                enemy_character  = self.opponent_characters[self.grid_tile_info[new_tile_position[0]][new_tile_position[1]][7:10]]
                 enemy_character.take_damage(self.selected_character.ATK)
+
+                if enemy_character.is_Dead:
+                    self.grid_tile_info[new_tile_position[0]][new_tile_position[1]][4] = "C"
+
                 self.selected_character.has_turn = False
                 self.tile_selected = False
                 return
+            elif self.grid_tile_info[new_tile_position[0]][new_tile_position[1]][4] == "C":
+                enemy_character = self.opponent_characters[int(self.grid_tile_info[new_tile_position[0]][new_tile_position[1]][5:7]) - 1]
+                enemy_character.take_damage(self.selected_character.ATK)
+
+                if enemy_character.is_Dead:
+                    self.grid_tile_info[new_tile_position[0]][new_tile_position[1]][4] = "C"
+
+                self.selected_character.has_turn = False
+                self.tile_selected = False
+                return
+
             else:
                 print("ERROR: invalid destination")
                 self.tile_selected = False

@@ -30,15 +30,15 @@ class Game:
         loaded_grid_tile_info = self.load_map()
         
 
-        player_characters = []
-        enemy_characters = []
+        player_characters = {}
+        enemy_characters = {}
 
         for tile_row in loaded_grid_tile_info:
             for tile in tile_row:
                 if tile[4] == "E": 
-                    enemy_characters.append(map_Data.Character([], "Test Name", tile[7:10], 1, 5, 5, 1, 0, 1, [], []))
+                    enemy_characters[tile[7:10]] = map_Data.Character([], "Test Name", tile[7:10], 1, 5, 5, 1, 0, 1, [], [])
                 elif tile[4] == "P":
-                    player_characters.append(map_Data.Character([], "Test Name", tile[7:10], 1, 5, 5, 1, 0, 1, [], []))
+                    player_characters[tile[7:10]] = map_Data.Character([], "Test Name", tile[7:10], 1, 5, 5, 1, 0, 1, [], [])
 
         
 
