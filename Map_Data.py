@@ -260,26 +260,41 @@ class Battle_Grid:
             true_agility = 1
         
         # Initial moves based on true agility
-        available_moves.append([character_tile_position[0] - 1, character_tile_position[1]])
-        available_moves.append([character_tile_position[0] + 1, character_tile_position[1]])
-        available_moves.append([character_tile_position[0], character_tile_position[1] + 1])
-        available_moves.append([character_tile_position[0], character_tile_position[1] - 1])
+        available_moves.append([character_tile_position[0] - 1, character_tile_position[1],true_agility-1])
+        available_moves.append([character_tile_position[0] + 1, character_tile_position[1],true_agility-1])
+        available_moves.append([character_tile_position[0], character_tile_position[1] + 1,true_agility-1])
+        available_moves.append([character_tile_position[0], character_tile_position[1] - 1,true_agility-1])
         last_added_moves = available_moves.copy()
 
+        if true_agility > 1:
+            moves_left = True
+        else:
+            moves_left = False
+
         # Determines all possible end tiles based on character agility
-        for _ in range(true_agility - 1):
+        while moves_left == True:
             for move in last_added_moves:
+                moves_left = False
                 temp_array = []
-                temp_array.append([move[0] - 1, move[1]])
-                temp_array.append([move[0] + 1, move[1]])
-                temp_array.append([move[0], move[1] + 1])
-                temp_array.append([move[0], move[1] - 1])
+                if move[2] > 0:
+                    temp_array.append([move[0] - 1, move[1],move[2]-1])
+                    temp_array.append([move[0] + 1, move[1],move[2]-1])
+                    temp_array.append([move[0], move[1] + 1,move[2]-1])
+                    temp_array.append([move[0], move[1] - 1,move[2]-1])
+                    moves_left = True
+                else:
+                    continue
+
 
                 # Combines the new moves with old moves but removes the duplicates
                 available_moves = list(set(available_moves) | set(temp_array))
                 last_added_moves = temp_array.copy()
 
-        return available_moves.copy()
+        moves_no_agility = []
+        for move in available_moves:
+            moves_no_agility.append(move[:2])
+
+        return moves_no_agility.copy()
 
     # Returns the character at the tile based on the character ID
     def get_character_at_tile(self, tile_position):
@@ -324,7 +339,7 @@ class Battle_Grid:
             print(f"Info present at selected tile: {self.grid_tile_info[tile_position[0]][tile_position[1]]}")
             pass
         
-        print(self.selected_tile_position)
+        
         return
 
     # Updates character position
