@@ -260,10 +260,10 @@ class Battle_Grid:
             true_agility = 1
         
         # Initial moves based on true agility
-        available_moves.append([character_tile_position[0] - 1, character_tile_position[1],true_agility-1])
-        available_moves.append([character_tile_position[0] + 1, character_tile_position[1],true_agility-1])
-        available_moves.append([character_tile_position[0], character_tile_position[1] + 1,true_agility-1])
-        available_moves.append([character_tile_position[0], character_tile_position[1] - 1,true_agility-1])
+        available_moves.append((character_tile_position[0] - 1, character_tile_position[1], true_agility-1))
+        available_moves.append((character_tile_position[0] + 1, character_tile_position[1], true_agility-1))
+        available_moves.append((character_tile_position[0], character_tile_position[1] + 1, true_agility-1))
+        available_moves.append((character_tile_position[0], character_tile_position[1] - 1, true_agility-1))
         last_added_moves = available_moves.copy()
 
         if true_agility > 1:
@@ -272,29 +272,27 @@ class Battle_Grid:
             moves_left = False
 
         # Determines all possible end tiles based on character agility
-        while moves_left == True:
+        while moves_left:
+            temp_array = []
             for move in last_added_moves:
-                moves_left = False
-                temp_array = []
                 if move[2] > 0:
-                    temp_array.append([move[0] - 1, move[1],move[2]-1])
-                    temp_array.append([move[0] + 1, move[1],move[2]-1])
-                    temp_array.append([move[0], move[1] + 1,move[2]-1])
-                    temp_array.append([move[0], move[1] - 1,move[2]-1])
-                    moves_left = True
-                else:
-                    continue
-
-
-                # Combines the new moves with old moves but removes the duplicates
+                    temp_array.append((move[0] - 1, move[1], move[2]-1))
+                    temp_array.append((move[0] + 1, move[1], move[2]-1))
+                    temp_array.append((move[0], move[1] + 1, move[2]-1))
+                    temp_array.append((move[0], move[1] - 1, move[2]-1))
+            if temp_array:
                 available_moves = list(set(available_moves) | set(temp_array))
                 last_added_moves = temp_array.copy()
+                moves_left = True
+            else:
+                moves_left = False
 
-        moves_no_agility = []
-        for move in available_moves:
-            moves_no_agility.append(move[:2])
+        moves_no_agility = [list(move[:2]) for move in available_moves]
+        
+        print(moves_no_agility)
 
-        return moves_no_agility.copy()
+        return moves_no_agility
+    
 
     # Returns the character at the tile based on the character ID
     def get_character_at_tile(self, tile_position):
