@@ -45,7 +45,30 @@ class Character:
         self.is_Dead = False
         self.has_turn = True
         self.no_corpse = False
+        self.apply_status_effects(statuses)
+        self.apply_equipment_effects(equipment)
+
+
        
+    # (current_HP, max_HP, ATK, SHIELD, AGI)
+    def apply_status_effects(self,statuses):
+
+        for status_effects in statuses:
+            self.current_HP += status_effects[0] 
+            self.max_HP += status_effects[1] 
+            self.ATK += status_effects[2] 
+            self.SHIELD += status_effects[3] 
+            self.AGI += status_effects[4] 
+    
+    # (current_HP, max_HP, ATK, SHIELD, AGI)
+    def apply_equipment_effects(self,equipment):
+
+        for equipment_effects in equipment:
+            self.current_HP += equipment_effects[0] 
+            self.max_HP += equipment_effects[1] 
+            self.ATK += equipment_effects[2] 
+            self.SHIELD += equipment_effects[3] 
+            self.AGI += equipment_effects[4] 
 
     def LVL_up(self):
         """
