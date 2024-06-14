@@ -54,3 +54,5 @@ class CHARACTER_EQUIPMENT:
             "MEDIUM_SHIELD": (0,0,0,2,0),
             "LARGE_SHIELD": (0,0,0,3,-1),
         }     
+
+
