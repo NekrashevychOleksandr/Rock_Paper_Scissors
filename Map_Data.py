@@ -15,7 +15,7 @@ class AI_bot:
 
 # Represents characters on the grid
 class Character:
-    def __init__(self, titles, name, character_id, LVL, current_HP, base_Max_HP, base_ATK, SHIELD, base_AGI, statuses, equipment):
+    def __init__(self, titles, name, character_image_id, character_id, LVL, current_HP, base_Max_HP, base_ATK, SHIELD, base_AGI, statuses, equipment):
         """
         Initialize a character.
 
@@ -33,6 +33,7 @@ class Character:
         """
         self.titles = titles
         self.name = name
+        self.image_id = character_image_id
         self.id = character_id
         self.LVL = LVL
         self.current_HP = current_HP
@@ -40,25 +41,36 @@ class Character:
         self.ATK = base_ATK
         self.SHIELD = SHIELD
         self.AGI = base_AGI
-        self.statuses = statuses
-        self.equipment = equipment
+        if statuses == "_":
+            self.statuses = []
+        else:
+            self.statuses = statuses
+
+        if equipment == "_": 
+            self.equipment = []
+        else:   
+            self.equipment = equipment
         self.is_Dead = False
         self.has_turn = True
         self.no_corpse = False
-        self.apply_status_effects(statuses)
         self.apply_equipment_effects(equipment)
 
 
        
     # (current_HP, max_HP, ATK, SHIELD, AGI)
-    def apply_status_effects(self,statuses):
+    def apply_1_round_of_status_effects(self,statuses):
 
         for status_effects in statuses:
-            self.current_HP += status_effects[0] 
-            self.max_HP += status_effects[1] 
-            self.ATK += status_effects[2] 
-            self.SHIELD += status_effects[3] 
-            self.AGI += status_effects[4] 
+            self.current_HP += status_effects[1][0] 
+            self.max_HP += status_effects[1][1] 
+            self.ATK += status_effects[1][2] 
+            self.SHIELD += status_effects[1][3] 
+            self.AGI += status_effects[1][4] 
+            status_effects[0] -= 1
+            if status_effects[0] == 0:
+                statuses.remove(status_effects)
+
+        self.statuses = statuses
     
     # (current_HP, max_HP, ATK, SHIELD, AGI)
     def apply_equipment_effects(self,equipment):

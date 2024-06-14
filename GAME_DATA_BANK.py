@@ -9,12 +9,18 @@ class TILE_AGILITY_EFFECTS:
             }
 
 
-class GRID_BATTLE_MAPS:
+class GRID_BATTLE_MAP_FILE_PATHS:
     def __init__(self) -> None:
         self.DATA = {
-            "test_Map_0":"test_Map_0.txt"
+            "TEST_MAP_000":"test_Map_0.txt"
             }
 
+class GRID_BATTLE_CHARACTER_FILE_PATHS:
+    def __init__(self) -> None:
+        self.DATA = {
+            "TEST_PLAYER_000":"player_characters_000.txt",
+            "TEST_ENEMY_000":"enemy_characters_000.txt",
+            }
 
 class TILE_IMAGE_FILE_PATHS:
     def __init__(self) -> None:
@@ -35,9 +41,9 @@ class CHARACTER_STATUSES:
     def __init__(self) -> None:
         self.DATA = {
             # (current_HP, max_HP, ATK, SHIELD, AGI)
-            "POISON": (-1,0,0,0,0),
-            "BLEED": (-1,0,0,0,0),
-            "BLEED": (-1,0,0,0,0),
+            "POISONED": [3,(-1,0,0,0,0)],
+            "BLEEDING": [3,(-1,0,0,0,0)]
+            
         }      
 
 class CHARACTER_EQUIPMENT:
