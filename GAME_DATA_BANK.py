@@ -30,6 +30,8 @@ class TILE_IMAGE_FILE_PATHS:
         }
 
 class CHARACTER_IMAGE_FILE_PATHS:
+    
+
     def __init__(self) -> None:
         self.DATA = {
             "P01": "Media/Sprites/test_character.png",
