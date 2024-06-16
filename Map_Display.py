@@ -180,6 +180,20 @@ class Character_Display:
         s = "id: {}, x: {}, y: {}".format(self.id, self.rect.x, self.rect.y)
         print(s)
 
+class sprite_Sheet: # creates a class for extracting images from a sprite sheet
+    def __init__(self, image):
+        self.sheet=image
+
+    def get_image(self,frame,width,height, scale, colour):
+        image = pygame.surface((width, height)). convert_alpha() #Get the height of the image surface
+        image.blit(self.sheet, (0,0), ((frame*width), 0, width, height)) 
+        image= pygame.transform.scale(image, (width*scale, height*scale))
+        image.set_colorkey(colour)
+
+        return image
+    
+    frame_0= get_image(sprite_sheet_image)
+
 class Characters_Display:
     def __init__(self, surface, loaded_grid_tile_info, tile_size, window_width, window_height):
         """
