@@ -195,6 +195,7 @@ class Game:
         Update the game state.
         """
         if self.battle_grid.updating_character_position:
+            print(self.battle_grid.next_character_move)
             self.battle_grid.update_character_position(self.battle_grid.next_character_move[2][self.battle_grid.character_movement_index])
             self.battle_grid.character_movement_index += 1
 

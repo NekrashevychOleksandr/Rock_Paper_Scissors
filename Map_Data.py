@@ -312,7 +312,7 @@ class Battle_Grid:
         
         moves_no_agility = [list(move[:2] + move[3:]) for move in available_moves]
         
-        print(moves_no_agility)
+        #print(moves_no_agility)
         return moves_no_agility
     
 
