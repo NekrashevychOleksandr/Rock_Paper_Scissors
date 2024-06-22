@@ -300,11 +300,11 @@ class Battle_Grid:
         tile_info = self.grid_tile_info[tile_position[0]][tile_position[1]]
         
 
-        if tile_info[4:5] == "PA":
-            return self.player_characters[tile_info[7:10]]
+        if tile_info[4:6] == "PA":
+            return self.player_characters[tile_info[8:11]]
         
-        elif tile_info[4:5] == "EA":
-            return self.opponent_characters[tile_info[7:10]]
+        elif tile_info[4:6] == "EA":
+            return self.opponent_characters[tile_info[8:11]]
         else:
             return None
 
@@ -319,7 +319,7 @@ class Battle_Grid:
         
         character_at_tile = self.get_character_at_tile(tile_position)
         try:
-            if self.grid_tile_info[tile_position[0]][tile_position[1]][4:5] == "PA" and character_at_tile.has_turn:
+            if self.grid_tile_info[tile_position[0]][tile_position[1]][4:6] == "PA" and character_at_tile.has_turn:
                
                 self.selected_tile_position = tile_position
                 self.tile_selected = True
@@ -379,7 +379,7 @@ class Battle_Grid:
                 self.tile_selected = False
                 return
             elif self.grid_tile_info[new_tile_position[0]][new_tile_position[1]][4] == "EA":
-                enemy_character  = self.opponent_characters[self.grid_tile_info[new_tile_position[0]][new_tile_position[1]][7:10]]
+                enemy_character  = self.opponent_characters[self.grid_tile_info[new_tile_position[0]][new_tile_position[1]][8:11]]
                 enemy_character.take_damage(self.selected_character.ATK)
 
                 if enemy_character.is_Dead:

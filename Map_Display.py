@@ -207,7 +207,7 @@ class Characters_Display:
         
         for y in range(self.tiles_vertical):
             for x in range(self.tiles_horizontal):
-                if grid_tile_info[y][x][4:5] == "EA" or grid_tile_info[y][x][4:5] == "PA":
+                if grid_tile_info[y][x][4:6] == "EA" or grid_tile_info[y][x][4:6] == "PA":
                     self.inner.append(Character_Display(x, y, grid_tile_info[y][x][4:8], self.tile_size))
 
         #print(grid_tile_info)
