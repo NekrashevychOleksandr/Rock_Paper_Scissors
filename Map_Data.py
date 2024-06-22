@@ -372,13 +372,13 @@ class Battle_Grid:
         :param new_tile_position: Position of the new tile to move to.
         """
         if new_tile_position in self.available_move_tiles:
-            if self.grid_tile_info[new_tile_position[0]][new_tile_position[1]][4:7] == "___":
+            if self.grid_tile_info[new_tile_position[0]][new_tile_position[1]][4:8] == "____":
 
                 self.update_character_position(new_tile_position)
                 self.selected_character.has_turn = False
                 self.tile_selected = False
                 return
-            elif self.grid_tile_info[new_tile_position[0]][new_tile_position[1]][4] == "EA":
+            elif self.grid_tile_info[new_tile_position[0]][new_tile_position[1]][4:6] == "EA":
                 enemy_character  = self.opponent_characters[self.grid_tile_info[new_tile_position[0]][new_tile_position[1]][8:11]]
                 enemy_character.take_damage(self.selected_character.ATK)
 
