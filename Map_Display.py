@@ -149,6 +149,8 @@ class Character_Display:
         self.x, self.y = int(x), int(y)
         self.myinc = 0.5
         self.tile_size = tile_size
+        self.walking = False
+        
 
 
         # Load the appropriate image based on the character kind
@@ -205,8 +207,8 @@ class Characters_Display:
         
         for y in range(self.tiles_vertical):
             for x in range(self.tiles_horizontal):
-                if grid_tile_info[y][x][4] == "E" or grid_tile_info[y][x][4] == "P":
-                    self.inner.append(Character_Display(x, y, grid_tile_info[y][x][4:7], self.tile_size))
+                if grid_tile_info[y][x][4:5] == "EA" or grid_tile_info[y][x][4:5] == "PA":
+                    self.inner.append(Character_Display(x, y, grid_tile_info[y][x][4:8], self.tile_size))
 
         #print(grid_tile_info)
         #print("\n")
@@ -231,6 +233,7 @@ class Characters_Display:
         if len(self.inner) == 0:
             raise ValueError("No characters to display")
         for elem in self.inner:
+
             self.surface.blit(elem.image, elem.rect)
 
     def debug_print(self):
