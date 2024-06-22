@@ -3,6 +3,7 @@ import map_Display
 import map_Data
 import GAME_DATA_BANK
 import os
+import time
 
 GRID_BATTLE_MAPS = GAME_DATA_BANK.GRID_BATTLE_MAP_FILE_PATHS().DATA
 GRID_BATTLE_CHARACTERS = GAME_DATA_BANK.GRID_BATTLE_CHARACTER_FILE_PATHS().DATA
@@ -159,6 +160,9 @@ class Game:
 
         if tile_coords[0] == None or tile_coords[1] == None:
             print(f"ERROR: No tile present at these coordinates")
+
+        elif self.battle_grid.updating_character_position:
+            print(f"ERROR: Currently updating character position")
         else: 
 
             if not self.battle_grid.tile_selected:
@@ -189,6 +193,15 @@ class Game:
         """
         Update the game state.
         """
+        if self.battle_grid.updating_character_position:
+            self.battle_grid.update_character_position(self.battle_grid.next_character_move[self.battle_grid.character_movement_index])
+            self.battle_grid.character_movement_index += 1
+
+            if self.battle_grid.character_movement_index >=  self.battle_grid.character_movements_total:
+                self.battle_grid.updating_character_position = False
+            
+            time.sleep(0.5)
+
         self.tiles.load_data(self.battle_grid.grid_tile_info)
         self.tiles.calculate_offset()
         self.characters.load_data(self.battle_grid.grid_tile_info)

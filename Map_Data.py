@@ -227,6 +227,9 @@ class Battle_Grid:
         self.selected_tile_position = [-1, -1]
         self.available_move_tiles = None
         self.selected_character = None
+        self.updating_character_position = False
+        self.character_movement_index = 0
+        self.next_character_move = []
 
     # Sets the turn to be the player's
     def set_turn_player(self):
@@ -371,46 +374,55 @@ class Battle_Grid:
 
         :param new_tile_position: Position of the new tile to move to.
         """
-        if new_tile_position in self.available_move_tiles:
-            if self.grid_tile_info[new_tile_position[0]][new_tile_position[1]][4:8] == "____":
+        print(self.available_move_tiles)
+        for move in self.available_move_tiles:
+            print(move[:2])
+            print(self.available_move_tiles)
+            if new_tile_position == move[:2]:
 
-                self.update_character_position(new_tile_position)
-                self.selected_character.has_turn = False
-                self.tile_selected = False
-                return
-            elif self.grid_tile_info[new_tile_position[0]][new_tile_position[1]][4:6] == "EA":
-                enemy_character  = self.opponent_characters[self.grid_tile_info[new_tile_position[0]][new_tile_position[1]][8:11]]
-                enemy_character.take_damage(self.selected_character.ATK)
+                if self.grid_tile_info[new_tile_position[0]][new_tile_position[1]][4:8] == "____":
 
-                if enemy_character.is_Dead:
-                    self.grid_tile_info[new_tile_position[0]][new_tile_position[1]][5] = "D"
+                    self.updating_character_position = True
+                    self.next_character_move = move
+                    self.character_movement_index = 0
+                    self.character_movements_total = len(move[2])
+                    self.selected_character.has_turn = False
+                    self.tile_selected = False
 
-                self.selected_character.has_turn = False
-                self.tile_selected = False
-                return
-            elif self.grid_tile_info[new_tile_position[0]][new_tile_position[1]][5] == "D":
-                enemy_character = self.opponent_characters[int(self.grid_tile_info[new_tile_position[0]][new_tile_position[1]][5:7]) - 1]
-                enemy_character.take_damage(self.selected_character.ATK)
+                    return
+                elif self.grid_tile_info[new_tile_position[0]][new_tile_position[1]][4:6] == "EA":
+                    enemy_character  = self.opponent_characters[self.grid_tile_info[new_tile_position[0]][new_tile_position[1]][8:11]]
+                    enemy_character.take_damage(self.selected_character.ATK)
 
-                if enemy_character.is_Dead:
-                    self.grid_tile_info[new_tile_position[0]][new_tile_position[1]][5] = "D"
+                    if enemy_character.is_Dead:
+                        self.grid_tile_info[new_tile_position[0]][new_tile_position[1]][5] = "D"
 
-                self.selected_character.has_turn = False
-                self.tile_selected = False
-                return
+                    self.selected_character.has_turn = False
+                    self.tile_selected = False
+                    return
+                elif self.grid_tile_info[new_tile_position[0]][new_tile_position[1]][5] == "D":
+                    enemy_character = self.opponent_characters[int(self.grid_tile_info[new_tile_position[0]][new_tile_position[1]][5:7]) - 1]
+                    enemy_character.take_damage(self.selected_character.ATK)
 
-            else:
-                print("ERROR: invalid destination")
-                self.tile_selected = False
-                self.selected_tile_position = [-1, -1]
-                self.available_move_tiles = None
-                self.selected_character = None
-                return
-        else:
+                    if enemy_character.is_Dead:
+                        self.grid_tile_info[new_tile_position[0]][new_tile_position[1]][5] = "D"
 
-            print("ERROR: new_tile_position not in self.available_move_tiles")
-            self.tile_selected = False
-            self.selected_tile_position = [-1, -1]
-            self.available_move_tiles = None
-            self.selected_character = None
-            return
+                    self.selected_character.has_turn = False
+                    self.tile_selected = False
+                    return
+
+                else:
+                    print("ERROR: invalid destination")
+                    self.tile_selected = False
+                    self.selected_tile_position = [-1, -1]
+                    self.available_move_tiles = None
+                    self.selected_character = None
+                    return
+   
+
+        print("ERROR: new_tile_position not in self.available_move_tiles")
+        self.tile_selected = False
+        self.selected_tile_position = [-1, -1]
+        self.available_move_tiles = None
+        self.selected_character = None
+        return
