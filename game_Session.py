@@ -111,12 +111,12 @@ class Game:
 
         for i in range(len(grid_tile_info)):
             for j in range(len(grid_tile_info[0])):
-                if grid_tile_info[i][j][4] == "E": 
+                if grid_tile_info[i][j][4:5] == "EA": 
                     old_tile_info = grid_tile_info[i][j][:4]
                     grid_tile_info[i][j] = old_tile_info + enemy_characters[enemy_ids[enemy_index]].image_id + enemy_ids[enemy_index]
                     enemy_index += 1
                     
-                elif grid_tile_info[i][j][4] == "P":
+                elif grid_tile_info[i][j][4:5] == "PA":
                     old_tile_info = grid_tile_info[i][j][:4]
                     grid_tile_info[i][j] = old_tile_info + player_characters[player_ids[player_index]].image_id + player_ids[player_index]
                     player_index += 1

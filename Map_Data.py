@@ -300,10 +300,10 @@ class Battle_Grid:
         tile_info = self.grid_tile_info[tile_position[0]][tile_position[1]]
         
 
-        if tile_info[4] == "P":
+        if tile_info[4:5] == "PA":
             return self.player_characters[tile_info[7:10]]
         
-        elif tile_info[4] == "E":
+        elif tile_info[4:5] == "EA":
             return self.opponent_characters[tile_info[7:10]]
         else:
             return None
@@ -319,7 +319,7 @@ class Battle_Grid:
         
         character_at_tile = self.get_character_at_tile(tile_position)
         try:
-            if self.grid_tile_info[tile_position[0]][tile_position[1]][4] == "P" and character_at_tile.has_turn:
+            if self.grid_tile_info[tile_position[0]][tile_position[1]][4:5] == "PA" and character_at_tile.has_turn:
                
                 self.selected_tile_position = tile_position
                 self.tile_selected = True
@@ -348,7 +348,7 @@ class Battle_Grid:
         :param new_tile_position: New position to move the character to.
         """
         # Get the character info from the current tile
-        character_info = self.grid_tile_info[self.selected_tile_position[0]][self.selected_tile_position[1]][4:10]
+        character_info = self.grid_tile_info[self.selected_tile_position[0]][self.selected_tile_position[1]][4:11]
         
         # Move the character to the new tile
         current_tile_value = self.grid_tile_info[new_tile_position[0]][new_tile_position[1]]
@@ -378,22 +378,22 @@ class Battle_Grid:
                 self.selected_character.has_turn = False
                 self.tile_selected = False
                 return
-            elif self.grid_tile_info[new_tile_position[0]][new_tile_position[1]][4] == "E":
+            elif self.grid_tile_info[new_tile_position[0]][new_tile_position[1]][4] == "EA":
                 enemy_character  = self.opponent_characters[self.grid_tile_info[new_tile_position[0]][new_tile_position[1]][7:10]]
                 enemy_character.take_damage(self.selected_character.ATK)
 
                 if enemy_character.is_Dead:
-                    self.grid_tile_info[new_tile_position[0]][new_tile_position[1]][4] = "C"
+                    self.grid_tile_info[new_tile_position[0]][new_tile_position[1]][5] = "D"
 
                 self.selected_character.has_turn = False
                 self.tile_selected = False
                 return
-            elif self.grid_tile_info[new_tile_position[0]][new_tile_position[1]][4] == "C":
+            elif self.grid_tile_info[new_tile_position[0]][new_tile_position[1]][5] == "D":
                 enemy_character = self.opponent_characters[int(self.grid_tile_info[new_tile_position[0]][new_tile_position[1]][5:7]) - 1]
                 enemy_character.take_damage(self.selected_character.ATK)
 
                 if enemy_character.is_Dead:
-                    self.grid_tile_info[new_tile_position[0]][new_tile_position[1]][4] = "C"
+                    self.grid_tile_info[new_tile_position[0]][new_tile_position[1]][5] = "D"
 
                 self.selected_character.has_turn = False
                 self.tile_selected = False

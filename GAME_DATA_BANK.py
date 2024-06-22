@@ -34,8 +34,8 @@ class CHARACTER_IMAGE_FILE_PATHS:
 
     def __init__(self) -> None:
         self.DATA = {
-            "P01": "Media/Sprites/test_character.png",
-            "E01": "Media/Sprites/test_enemy.png",
+            "PA01": "Media/Sprites/test_character.png",
+            "EA01": "Media/Sprites/test_enemy.png",
         }
 
 
