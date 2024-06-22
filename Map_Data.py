@@ -254,6 +254,7 @@ class Battle_Grid:
         :return: List of available move positions.
         """
         available_moves = []
+        
 
         # Calculate true agility considering the tile effect
         true_agility = self.selected_character.AGI + TILE_AGILITY_EFFECTS[self.grid_tile_info[character_tile_position[0]][character_tile_position[1]][0]]
@@ -263,37 +264,55 @@ class Battle_Grid:
             true_agility = 1
         
         # Initial moves based on true agility
-        available_moves.append((character_tile_position[0] - 1, character_tile_position[1], true_agility-1, [[character_tile_position[0] - 1, character_tile_position[1]]]))
-        available_moves.append((character_tile_position[0] + 1, character_tile_position[1], true_agility-1, [[character_tile_position[0] + 1, character_tile_position[1]]]))
-        available_moves.append((character_tile_position[0], character_tile_position[1] + 1, true_agility-1, [[character_tile_position[0], character_tile_position[1] + 1]]))
-        available_moves.append((character_tile_position[0], character_tile_position[1] - 1, true_agility-1, [[character_tile_position[0], character_tile_position[1] - 1]]))
+        available_moves.append([character_tile_position[0] - 1, character_tile_position[1], true_agility-1, [[character_tile_position[0] - 1, character_tile_position[1]]]])
+        available_moves.append([character_tile_position[0] + 1, character_tile_position[1], true_agility-1, [[character_tile_position[0] + 1, character_tile_position[1]]]])
+        available_moves.append([character_tile_position[0], character_tile_position[1] + 1, true_agility-1, [[character_tile_position[0], character_tile_position[1] + 1]]])
+        available_moves.append([character_tile_position[0], character_tile_position[1] - 1, true_agility-1, [[character_tile_position[0], character_tile_position[1] - 1]]])
         last_added_moves = available_moves.copy()
+
 
         if true_agility > 1:
             moves_left = True
         else:
             moves_left = False
 
+        
         # Determines all possible end tiles based on character agility
         while moves_left:
             temp_array = []
+            
             for move in last_added_moves:
                 if move[2] > 0:
-                    temp_array.append((move[0] - 1, move[1], move[2]-1, move[3].append([move[0] - 1, move[1]])))
-                    temp_array.append((move[0] + 1, move[1], move[2]-1, move[3].append([move[0] + 1, move[1]])))
-                    temp_array.append((move[0], move[1] + 1, move[2]-1, move[3].append([move[0], move[1] + 1])))
-                    temp_array.append((move[0], move[1] - 1, move[2]-1, move[3].append([move[0], move[1] - 1])))
-            if temp_array:
+
+                    path_1 = move[3].copy()
+                    path_2 = move[3].copy()
+                    path_3 = move[3].copy()
+                    path_4 = move[3].copy()
+
+                    path_1.append([move[0] - 1, move[1]])
+                    path_2.append([move[0] + 1, move[1]])
+                    path_3.append([move[0], move[1] - 1])
+                    path_4.append([move[0], move[1] + 1])
+
+                    temp_array.append([move[0] - 1, move[1], move[2]-1, path_1])
+                    temp_array.append([move[0] + 1, move[1], move[2]-1, path_2])
+                    temp_array.append([move[0], move[1] + 1, move[2]-1, path_3])
+                    temp_array.append([move[0], move[1] - 1, move[2]-1, path_4])
+                    move[2] -= 1
+
+            if temp_array != []:
                 # available_moves = list(set(available_moves) | set(temp_array)) *** Removing for now because I may need all of the possible paths a character may take
+                for move in temp_array:
+                    available_moves.append(move)
                 last_added_moves = temp_array.copy()
                 moves_left = True
             else:
                 moves_left = False
 
+        
         moves_no_agility = [list(move[:2] + move[3:]) for move in available_moves]
         
         print(moves_no_agility)
-
         return moves_no_agility
     
 
@@ -321,12 +340,13 @@ class Battle_Grid:
         """
         
         character_at_tile = self.get_character_at_tile(tile_position)
+        
         try:
             if self.grid_tile_info[tile_position[0]][tile_position[1]][4:6] == "PA" and character_at_tile.has_turn:
                
                 self.selected_tile_position = tile_position
                 self.tile_selected = True
-
+                
                 self.selected_character = character_at_tile
 
                 if self.selected_character == None:
@@ -334,6 +354,7 @@ class Battle_Grid:
                     return
 
                 self.available_move_tiles = self.get_characters_available_moves(self.selected_tile_position)
+                
         
         except AttributeError:
             print(f"ERROR: No Character Present at the tile position [Row: {tile_position[0]}, Column: {tile_position[1]}]")
@@ -374,12 +395,9 @@ class Battle_Grid:
 
         :param new_tile_position: Position of the new tile to move to.
         """
-        print(self.available_move_tiles)
-        for move in self.available_move_tiles:
-            print(move[:2])
-            print(self.available_move_tiles)
-            if new_tile_position == move[:2]:
 
+        for move in self.available_move_tiles:
+            if new_tile_position == move[:2]:
                 if self.grid_tile_info[new_tile_position[0]][new_tile_position[1]][4:8] == "____":
 
                     self.updating_character_position = True

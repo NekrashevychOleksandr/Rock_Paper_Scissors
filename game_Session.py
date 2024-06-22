@@ -88,6 +88,7 @@ class Game:
 
 
 
+
         enemy_characters = {}
         filepath = os.path.join(enemy_path)
         try:
@@ -194,12 +195,12 @@ class Game:
         Update the game state.
         """
         if self.battle_grid.updating_character_position:
-            self.battle_grid.update_character_position(self.battle_grid.next_character_move[self.battle_grid.character_movement_index])
+            self.battle_grid.update_character_position(self.battle_grid.next_character_move[2][self.battle_grid.character_movement_index])
             self.battle_grid.character_movement_index += 1
 
             if self.battle_grid.character_movement_index >=  self.battle_grid.character_movements_total:
                 self.battle_grid.updating_character_position = False
-            
+
             time.sleep(0.5)
 
         self.tiles.load_data(self.battle_grid.grid_tile_info)
